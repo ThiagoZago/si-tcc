@@ -30,7 +30,7 @@ function Access() {
 
   return (
     <div className={`${styles.gradiente} d-flex justify-content-center align-items-center vh-100`}>
-      <div className={`${styles.card} card p-4 shadow`} style={{ width: "48vh" }}>
+      <div className={`${styles.card} card p-4 shadow`} style={{ width: "55vh" }}>
           <h2 className="text-center">Acesse já</h2>
           {error && <p className="alert alert-danger">{error}</p>}
           <form onSubmit={handleSubmit}>

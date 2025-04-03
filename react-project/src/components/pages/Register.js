@@ -31,7 +31,7 @@ function Register() {
 
   return (
     <div className={`${styles.gradiente} d-flex justify-content-center align-items-center vh-100`}>
-        <div className={`${styles.card} card p-4 shadow`} style={{ width: "48vh" }}>
+        <div className={`${styles.card} card p-4 shadow`} style={{ width: "55vh" }}>
             <h2 className="text-center">Registre-se Aqui</h2>
             {message && <p className="alert alert-danger">{message}</p>}
             <form onSubmit={handleSubmit}>
