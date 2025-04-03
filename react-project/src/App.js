@@ -1,24 +1,47 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+
+import NavBar from './components/layout/NavBar/NavBar';
+import Footer from './components/layout/Footer/Footer';
+import Container from './components/layout/Container/Container'
+
+import Home from './components/pages/Home';
+import About from './components/pages/About';
+import Help from './components/pages/Help';
+import Schedule from './components/pages/Schedule';
+import Access from './components/pages/Access';
+import News from './components/pages/News';
+import Developers from './components/pages/Developers';
+import UserPage from './components/pages/UserPage';
+import Register from './components/pages/Register';
+
+import ScrollToTop from './components/ScrollToTop';
+import ProtectedRoute from './components/ProtectedRoute';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <ScrollToTop />
+      <NavBar />
+      <Container>
+        <Routes>
+          <Route path="/" exact element={<Home />} />
+          <Route path="/sobre-nos" element={<About />} />
+          <Route path="/ajuda" element={<Help />}/>
+          <Route path="/agendar" element={<Schedule />}/>
+          <Route path="/acesso" element={<Access />}/>
+          <Route path="/novidades" element={<News />} />
+          <Route path="/desenvolvedores" element={<Developers />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/inicio" element={<UserPage/>} />
+          </Route>
+          <Route path="/registro" element={<Register />}></Route>
+        </Routes>
+      </Container>
+      <Footer />
+    </Router>
   );
 }
 
