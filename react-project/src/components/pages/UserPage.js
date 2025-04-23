@@ -1,10 +1,32 @@
 import { useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
+import styles from "./UserPage.module.css";
 import { logout } from "../../services/authService";
 
 function UserPage() {
     const navigate = useNavigate();
     const [abaAtiva, setAbaAtiva] = useState("perfil");
+
+    const [agendamentos, setAgendamentos] = useState([]);
+    const [mensagem, setMensagem] = useState("");
+  
+    useEffect(() => {
+      const fetchAgendamentos = async () => {
+        try {
+          const token = localStorage.getItem("token"); // Obtém o token JWT armazenado
+          const response = await axios.get("http://127.0.0.1:5000/agendamentos_passados", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setAgendamentos(response.data.agendamentos);
+        } catch (error) {
+          setMensagem(error.response?.data?.msg || "Erro ao carregar agendamentos.");
+        }
+      };
+  
+      fetchAgendamentos();
+    }, []);
 
     const handleLogout = () => {
       logout();
@@ -19,11 +41,11 @@ function UserPage() {
         </div>
   
         {/* Contêiner das Abas */}
-        <div className="mt-4 w-50">
+        <div className="mt-4 vw-70">
           <ul className="nav nav-tabs justify-content-center bg-light p-2 rounded shadow">
             <li className="nav-item">
               <button
-                className={`nav-link ${abaAtiva === "perfil" ? "active" : ""}`}
+                className={`nav-link ${abaAtiva === "perfil" ? styles.activeCss : styles.inactiveCss}`}
                 onClick={() => setAbaAtiva("perfil")}
               >
                 Perfil
@@ -31,7 +53,7 @@ function UserPage() {
             </li>
             <li className="nav-item">
               <button
-                className={`nav-link ${abaAtiva === "configuracoes" ? "active" : ""}`}
+                className={`nav-link ${abaAtiva === "configuracoes" ? styles.activeCss : styles.inactiveCss}`}
                 onClick={() => setAbaAtiva("configuracoes")}
               >
                 Configurações
@@ -39,7 +61,7 @@ function UserPage() {
             </li>
             <li className="nav-item">
               <button
-                className={`nav-link ${abaAtiva === "historico" ? "active" : ""}`}
+                className={`nav-link ${abaAtiva === "historico" ? styles.activeCss : styles.inactiveCss}`}
                 onClick={() => setAbaAtiva("historico")}
               >
                 Histórico
@@ -64,7 +86,18 @@ function UserPage() {
             {abaAtiva === "historico" && (
               <div className="tab-pane fade show active">
                 <h4>Histórico de Agendamentos</h4>
-                <p>Aqui aparece o histórico de agendamentos.</p>
+                <div className="container mt-5">
+                  <h2 className="mb-4">Agendamentos Passados</h2>
+                  {mensagem && <div className="alert alert-danger">{mensagem}</div>}
+                  <ul className="list-group">
+                    {agendamentos.map((agendamento, index) => (
+                      <li key={index} className="list-group-item">
+                        <strong>Data:</strong> {agendamento.data} <br />
+                        <strong>Hora:</strong> {agendamento.hora}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             )}
           </div>

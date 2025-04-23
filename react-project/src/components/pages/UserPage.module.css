@@ -1,0 +1,13 @@
+.inactiveCss{
+    color: #000;
+}
+
+.activeCss {
+    color:#b91616 !important;
+    font-weight: 600;
+    text-decoration: underline !important;
+}
+
+.inactiveCss:hover{
+    color:#000;
+}
