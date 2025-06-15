@@ -9,24 +9,24 @@ function UserPage() {
     const navigate = useNavigate();
     const [abaAtiva, setAbaAtiva] = useState("perfil");
 
-    const [agendamentos, setAgendamentos] = useState([]);
-    const [mensagem, setMensagem] = useState("");
+    // const [agendamentos, setAgendamentos] = useState([]);
+    // const [mensagem, setMensagem] = useState("");
   
-    useEffect(() => {
-      const fetchAgendamentos = async () => {
-        try {
-          const token = localStorage.getItem("token"); // Obtém o token JWT armazenado
-          const response = await axios.get("http://127.0.0.1:5000/agendamentos_passados", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          setAgendamentos(response.data.agendamentos);
-        } catch (error) {
-          setMensagem(error.response?.data?.msg || "Erro ao carregar agendamentos.");
-        }
-      };
+    // useEffect(() => {
+    //   const fetchAgendamentos = async () => {
+    //     try {
+    //       const token = localStorage.getItem("token"); // Obtém o token JWT armazenado
+    //       const response = await axios.get("http://127.0.0.1:5000/agendamentos_passados", {
+    //         headers: { Authorization: `Bearer ${token}` },
+    //       });
+    //       setAgendamentos(response.data.agendamentos);
+    //     } catch (error) {
+    //       setMensagem(error.response?.data?.msg || "Erro ao carregar agendamentos.");
+    //     }
+    //   };
   
-      fetchAgendamentos();
-    }, []);
+    //   fetchAgendamentos();
+    // }, []);
 
     const handleLogout = () => {
       logout();
@@ -88,7 +88,7 @@ function UserPage() {
                 <h4>Histórico de Agendamentos</h4>
                 <div className="container mt-5">
                   <h2 className="mb-4">Agendamentos Passados</h2>
-                  {mensagem && <div className="alert alert-danger">{mensagem}</div>}
+                  {/* {mensagem && <div className="alert alert-danger">{mensagem}</div>}
                   <ul className="list-group">
                     {agendamentos.map((agendamento, index) => (
                       <li key={index} className="list-group-item">
@@ -96,7 +96,7 @@ function UserPage() {
                         <strong>Hora:</strong> {agendamento.hora}
                       </li>
                     ))}
-                  </ul>
+                  </ul> */}
                 </div>
               </div>
             )}

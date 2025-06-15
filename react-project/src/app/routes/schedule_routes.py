@@ -8,7 +8,7 @@ bp = Blueprint("schedule", __name__)
 def agendar():
     return schedule_controller.agendar(request)
 
-@bp.route("/agendamentos_passados", methods=["GET"])
-@jwt_required()
-def agendamentos_passados():
-    return schedule_controller.agendamentos_passados(request)
+# @bp.route("/agendamentos_passados", methods=["GET"])
+# @jwt_required()
+# def agendamentos_passados():
+#     return schedule_controller.agendamentos_passados(request)

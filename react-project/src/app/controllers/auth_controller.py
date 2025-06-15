@@ -2,18 +2,29 @@ from flask import jsonify
 from app.extensions import mongo
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, get_jwt_identity
+from app.models.user_model import create_user
+from app.middlewares.validation_register import validate_username, validate_password
 
 def register(request):
-    data = request.get_json()
-    username = data["username"]
-    password = data["password"]
-    telefone = data.get("telefone")
+    data = request.get_json() # Obtém os dados enviados pelo cliente
+    username = data.get("username")
+    password = data.get("password")
 
-    if mongo.db.system.find_one({"username": username}):
-        return jsonify({"msg": "Usuário já existe"}), 400
+    # Validação do username
+    username_error = validate_username(username)
+    if username_error:
+        return jsonify({"msg": username_error}), 400
 
-    hashed_password = generate_password_hash(password)
-    mongo.db.system.insert_one({"username": username, "password": hashed_password, "telefone": telefone})
+    # Validação da senha
+    password_error = validate_password(password)
+    if password_error:
+        return jsonify({"msg": password_error}), 400
+
+    if mongo.db.system.find_one({"username": username}): # Checa se o usuário já existe
+        return jsonify({"msg": "Erro ao registrar o usuário"}), 400
+
+    hashed_password = generate_password_hash(password) # Criptografa a senha
+    create_user(username, hashed_password)  # Usar o model para criar o usuário
     return jsonify({"msg": "Usuário registrado com sucesso"}), 201
 
 def login(request):
