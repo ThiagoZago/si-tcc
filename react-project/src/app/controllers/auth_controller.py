@@ -2,7 +2,7 @@ from flask import jsonify
 from app.extensions import mongo
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, get_jwt_identity
-from app.models.user_model import create_user
+from app.models.user_model import create_user, check_user_exists
 from app.middlewares.validation_register import validate_username, validate_password
 
 def register(request):
@@ -20,7 +20,7 @@ def register(request):
     if password_error:
         return jsonify({"msg": password_error}), 400
 
-    if mongo.db.system.find_one({"username": username}): # Checa se o usuário já existe
+    if check_user_exists(username): # Checa se o usuário já existe
         return jsonify({"msg": "Erro ao registrar o usuário"}), 400
 
     hashed_password = generate_password_hash(password) # Criptografa a senha
@@ -35,7 +35,7 @@ def login(request):
         return jsonify({"msg": "Credenciais inválidas"}), 401
 
     access_token = create_access_token(identity=data["username"])
-    return jsonify({"token": access_token}), 200
+    return jsonify({"token": access_token, "msg":"Redirecionando..."}), 200
 
 def dashboard():
     return jsonify({"msg": "Acesso permitido ao dashboard"}), 200

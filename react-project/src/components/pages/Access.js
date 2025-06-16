@@ -6,7 +6,9 @@ import styles from "./Access.module.css";
 function Access() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,20 +24,29 @@ function Access() {
     const response = await login(username, password);
 
     if (response.token) {
-      navigate("/inicio");
+      setSuccess(true);
+      setMessage(response.msg);
+      setTimeout(() => {
+        navigate("/inicio");
+      }, 3000)
+      
     } else {
-      setError(response.msg);
+      setMessage(response.msg);
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000)
     }
   };
 
   return (
     <div className={`${styles.gradiente} d-flex justify-content-center align-items-center vh-100`}>
-      <div className={`${styles.card} card p-4 shadow`} style={{ width: "55vh" }}>
-          <h2 className="text-center">Acesse já</h2>
-          {error && <p className="alert alert-danger">{error}</p>}
+      <div className={`${styles.card} col-4 card p-4 shadow`} >
+          <h2 className="text-center mb-4">Acesse já</h2>
+          {message && <div className={success ? "alert alert-success text-center" : "alert alert-danger text-center"}>{message}</div>}
           <form onSubmit={handleSubmit}>
-              <div className="mb-3">
+              <div className="mb-3 form-floating">
                 <input
+                  id="floatingEmail"
                   type="email"
                   placeholder="Email"
                   className="form-control"
@@ -43,16 +54,27 @@ function Access() {
                   onChange={(e) => setUsername(e.target.value)}
                   required
                 />
+                <label for="floatingEmail">Email</label>
               </div>
               <div className="mb-3">
-                <input
-                  type="password"
-                  placeholder="Senha"
-                  className="form-control"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
+                <div className="input-group form-floating">
+                    <input
+                      id="floatingPassword"
+                      type={showPassword ? "text" : "password"} // Alterna o tipo do input
+                      placeholder="Senha"
+                      className="form-control"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <label for="floatingPassword">Senha</label>
+                    <button
+                      type="button"
+                      className="btn btn-outline-secondary"
+                      onClick={() => setShowPassword(!showPassword)} // Alterna o estado
+                    >
+                      {showPassword ? "Ocultar" : "Mostrar"}
+                    </button>
+                  </div>
               </div>
             <button type="submit" className="btn btn-dark w-100">Entrar</button>
           </form>
