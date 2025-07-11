@@ -1,0 +1,25 @@
+.caixa {
+    min-height:90vh;
+    align-content: center;
+}
+
+.title {
+    margin-bottom: 1em;
+}
+
+p {
+    font-weight: 600;
+}
+
+/* Estado inicial (fora da tela) */
+.hidden {
+  opacity: 0;
+  transform: translateY(100px); /* Componente começa abaixo */
+}
+
+/* Animação de entrada */
+.animateIn {
+  opacity: 1;
+  transform: translateY(0); /* Volta à posição original */
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Transição suave */
+}

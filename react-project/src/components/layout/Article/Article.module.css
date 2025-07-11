@@ -1,0 +1,31 @@
+ul li {
+    list-style: none;
+}
+
+.artigo {
+    background-color: rgba(240, 240, 240, 0.5); /* Fundo branco para destacar a sombra */
+    border-radius: 8px; /* Borda levemente arredondada */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3); /* Sombra suave */
+    padding: 20px; /* Espaçamento interno */
+    margin: 5em 0; /* Espaçamento inferior entre artigos */
+    transition: transform 0.4s ease, opacity 1.5s ease, box-shadow 0.4s ease; /* Transição suave de transformação e opacidade */
+    opacity: 0; /* Inicialmente invisível */
+    transform: translateY(20px); /* Começa deslocado para baixo */
+}
+
+/* Efeito quando o artigo estiver sendo exibido */
+.artigo.visible {
+    opacity: 1; /* Torna o artigo visível */
+    transform: translateY(0); /* Desloca o artigo para sua posição normal */
+}
+  
+.artigo:hover {
+    transform: translateY(-5px); /* Eleva o artigo ao passar o mouse */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.1); /* Aumenta a sombra */
+}
+
+.smallText{
+    color: #000;
+    font-weight: 600;
+    font-size: x-small;
+}
