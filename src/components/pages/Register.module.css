@@ -1,26 +1,9 @@
-.container {
-  background: linear-gradient(135deg, #000, #b91616);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
-}
-
-.requirements {
-  margin-bottom: 1.5rem;
-  padding: 1rem;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-}
-
-.requirementsList {
-  margin: 0.5rem 0 0 0;
-  padding-left: 1rem;
-  font-size: 0.875rem;
-}
-
-.requirementsList li {
-  margin-bottom: 0.25rem;
-  color: #666;
-}
+@@ .. @@
+ .container {
+   background: linear-gradient(135deg, #000, #b91616);
+   min-height: 100vh;
+   display: flex;
+-  justify-content: center;
+   align-items: center;
+   padding: 2rem;
+ }

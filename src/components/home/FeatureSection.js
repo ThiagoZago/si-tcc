@@ -1,96 +1,54 @@
 import { useState, useEffect, useRef } from 'react';
 import Button from '../ui/Button';
-import Container from '../layout/Container';
-import Section from '../layout/Section';
 import styles from './FeatureSection.module.css';
 
 function FeatureSection({ 
-  title, 
-  description, 
-  image, 
-  imageAlt, 
-  reversed = false,
-  background = 'transparent',
-  titleColor = '#000',
-  textColor = '#666'
+  title,
+  description,
+  image,
+  background,
+  reverse,
+  buttonText,
+  buttonLink,
+  onButtonClick
 }) {
-  const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    const currentRef = sectionRef.current;
-    if (currentRef) {
-      observer.observe(currentRef);
+  const handleButtonClick = () => {
+    if (onButtonClick) {
+      onButtonClick();
     }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
-  }, []);
-
-  const contentStyle = {
-    backgroundColor: background === 'transparent' ? 'rgba(240, 240, 240, 0.95)' : background,
-    color: textColor,
-    borderRadius: '24px',
-    padding: '40px',
-    textAlign: 'center'
-  };
-
-  const titleStyle = {
-    color: titleColor,
-    marginBottom: '1.5rem'
   };
 
   return (
-    <Section background={background}>
-      <Container>
+    <section className="py-5" style={{ backgroundColor: background }}>
+      <div className="container">
         <div 
           ref={sectionRef}
           className={`row align-items-center ${styles.feature} ${
-            isVisible ? styles.visible : styles.hidden
-          }`}
-        >
-          <div className={`col-md-6 ${reversed ? 'order-md-2' : ''}`}>
-            <div style={contentStyle}>
-              <h3 style={titleStyle} className="fs-2">
-                {title}
-              </h3>
-              {Array.isArray(description) ? (
-                description.map((text, index) => (
-                  <p key={index} className="mb-3">{text}</p>
-                ))
-              ) : (
-                <p className="mb-4">{description}</p>
-              )}
-              <Button to="/acesso" variant="primary">
-                COMECE AGORA
+            reverse ? styles.reverse : ''
+          }`}>
+          <div className="col-lg-6">
+            <h2>{title}</h2>
+            <p>{description}</p>
+            {buttonText && (
+              <Button
+                onClick={handleButtonClick}
+                href={buttonLink}
+              >
+                {buttonText}
               </Button>
-            </div>
+            )}
           </div>
-          
-          <div className={`col-md-6 ${reversed ? 'order-md-1' : ''}`}>
+          <div className="col-lg-6">
             <img
               src={image}
-              className="img-fluid rounded"
-              alt={imageAlt}
-              style={{ maxHeight: '480px', width: '100%', objectFit: 'cover' }}
+              alt={title}
+              className="img-fluid"
             />
           </div>
         </div>
-      </Container>
-    </Section>
+      </div>
+    </section>
   );
 }
-
-export default FeatureSection;
