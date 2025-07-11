@@ -1,85 +1,69 @@
-import styles from './Help.module.css'
+import Container from "../layout/Container";
+import Section from "../layout/Section";
+
+const faqItems = [
+  {
+    id: "collapseOne",
+    question: "Como funciona o agendamento online?",
+    answer: "Nosso sistema permite que seus clientes agendem horários 24/7 através do site ou WhatsApp. Você recebe notificações em tempo real e pode gerenciar todos os agendamentos em um painel único."
+  },
+  {
+    id: "collapseTwo",
+    question: "Posso personalizar meus serviços e preços?",
+    answer: "Sim! Você pode cadastrar todos os seus serviços, definir preços, duração e até mesmo criar pacotes promocionais. Tudo é totalmente personalizável."
+  },
+  {
+    id: "collapseThree",
+    question: "Como funciona o sistema de lembretes?",
+    answer: "Enviamos lembretes automáticos por WhatsApp e email para seus clientes, reduzindo significativamente o número de faltas e melhorando a experiência do cliente."
+  },
+  {
+    id: "collapseFour",
+    question: "Posso acessar relatórios do meu negócio?",
+    answer: "Sim! Oferecemos relatórios detalhados sobre faturamento, clientes mais frequentes, serviços mais procurados e muito mais para ajudar você a tomar decisões estratégicas."
+  }
+];
 
 function Help() {
-
   return (
-    <div className={`container mt-5 ${styles.caixa}`}>
-      <h2>Seção de Dúvidas</h2>
-      <div className="accordion accordion-flush" id="accordionExample">
-        <div className="accordion-item">
-          <h2 className="accordion-header">
-            <button
-              className="accordion-button collapsed d-flex justify-content-between align-items-center"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapseOne"
-              aria-expanded="false"
-              aria-controls="collapseOne"
-            >
-            O que é React?
-            </button>
-          </h2>
-          <div
-            id="collapseOne"
-            className="accordion-collapse collapse"
-            data-bs-parent="#accordionExample"
-          >
-            <div className="accordion-body">
-              React é uma biblioteca JavaScript para a criação de interfaces de usuário.
+    <Section padding="py-5">
+      <Container>
+        <div className="row justify-content-center">
+          <div className="col-12 col-lg-8">
+            <h2 className="text-center mb-5">Perguntas Frequentes</h2>
+            
+            <div className="accordion accordion-flush" id="faqAccordion">
+              {faqItems.map((item) => (
+                <div key={item.id} className="accordion-item">
+                  <h2 className="accordion-header">
+                    <button
+                      className="accordion-button collapsed"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target={`#${item.id}`}
+                      aria-expanded="false"
+                      aria-controls={item.id}
+                    >
+                      {item.question}
+                    </button>
+                  </h2>
+                  <div
+                    id={item.id}
+                    className="accordion-collapse collapse"
+                    data-bs-parent="#faqAccordion"
+                  >
+                    <div className="accordion-body">
+                      {item.answer}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
-
-        <div className="accordion-item">
-          <h2 className="accordion-header">
-            <button
-              className="accordion-button collapsed d-flex justify-content-between align-items-center"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapseTwo"
-              aria-expanded="false"
-              aria-controls="collapseTwo"
-            >
-              Como instalar o React?
-            </button>
-          </h2>
-          <div
-            id="collapseTwo"
-            className="accordion-collapse collapse"
-            data-bs-parent="#accordionExample"
-          >
-            <div className="accordion-body">
-              Você pode instalar o React usando o comando: `npm install react`.
-            </div>
-          </div>
-        </div>
-
-        <div className="accordion-item">
-          <h2 className="accordion-header">
-            <button
-              className="accordion-button collapsed d-flex justify-content-between align-items-center"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapseThree"
-              aria-expanded="false"
-              aria-controls="collapseThree"
-            >
-              O que é o Bootstrap?
-            </button>
-          </h2>
-          <div
-            id="collapseThree"
-            className="accordion-collapse collapse"
-            data-bs-parent="#accordionExample"
-          >
-            <div className="accordion-body">
-              Bootstrap é um framework front-end para desenvolvimento de websites responsivos e móveis.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      </Container>
+    </Section>
   );
-};
+}
 
 export default Help;

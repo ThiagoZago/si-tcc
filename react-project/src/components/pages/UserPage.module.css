@@ -1,13 +1,65 @@
-.inactiveCss{
-    color: #000;
+.container {
+  min-height: 100vh;
+  background-color: #f8f9fa;
 }
 
-.activeCss {
-    color:#b91616 !important;
-    font-weight: 600;
-    text-decoration: underline !important;
+.header {
+  background: linear-gradient(135deg, #b91616, #8b0000);
+  padding: 2rem 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.inactiveCss:hover{
-    color:#000;
+.content {
+  padding: 2rem 0;
+}
+
+.tabs {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.tabs .nav-link {
+  border: none;
+  color: #666;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.active {
+  background-color: #b91616 !important;
+  color: white !important;
+}
+
+.inactive:hover {
+  background-color: #f8f9fa;
+  color: #b91616;
+}
+
+.tabContent {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  min-height: 400px;
+}
+
+.tabContent h4 {
+  color: #b91616;
+  margin-bottom: 1rem;
+}
+
+.tabContent .card {
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.tabContent .card:hover {
+  transform: translateY(-2px);
 }

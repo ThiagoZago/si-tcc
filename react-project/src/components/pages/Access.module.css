@@ -1,18 +1,8 @@
-.gradiente{
-    background-image: linear-gradient(#000, #b91616);
-    margin:0;
+.container {
+  background: linear-gradient(135deg, #000, #b91616);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
 }
-
-.card {
-    opacity: 0;
-    transform: translateY(50px);
-    animation: slideUp 0.5s ease-out forwards;
-}
-  
-@keyframes slideUp {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-}
-  
