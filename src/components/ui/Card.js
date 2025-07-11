@@ -1,12 +1,12 @@
+import styles from './Card.module.css';
+
 function Card({ children, className = '', animated = false, ...props }) {
   return (
     <div 
-      className={`card ${animated ? 'fade-in' : ''} ${className}`}
+      className={`${styles.card} ${animated ? styles.animated : ''} ${className}`}
       {...props}
     >
-      <div className="card-body">
-        {children}
-      </div>
+      {children}
     </div>
   );
 }
