@@ -1,118 +1,102 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { padronizarTelefone } from "../../services/phoneNumber";
-import Container from "../layout/Container";
-import Section from "../layout/Section";
-import Card from "../ui/Card";
-import Input from "../ui/Input";
-import Button from "../ui/Button";
-import Alert from "../ui/Alert";
 
-function Schedule() {
-  const [formData, setFormData] = useState({
-    nome: "",
-    telefone: "",
-    data: "",
-    hora: "",
-  });
-  const [message, setMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+function Schedule () {
+    const [formData, setFormData] = useState({
+        nome: "",
+        telefone: "",
+        data: "",
+        hora: "",
+    });
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    const [mensagem, setMensagem] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    
-    try {
-      const telefonePadronizado = padronizarTelefone(formData.telefone);
-      const requestData = { ...formData, telefone: telefonePadronizado };
-      
-      const response = await axios.post("http://127.0.0.1:5000/agendar", requestData);
-      setMessage(response.data.msg);
-      setFormData({ nome: "", telefone: "", data: "", hora: "" });
-    } catch (error) {
-      setMessage(error.response?.data?.msg || "Erro ao realizar o agendamento.");
-    }
-    
-    setIsLoading(false);
-    setTimeout(() => setMessage(""), 5000);
-  };
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
-  return (
-    <Section padding="py-5">
-      <Container>
-        <div className="row justify-content-center">
-          <div className="col-12 col-md-8 col-lg-6">
-            <Card>
-              <h2 className="text-center mb-4">Agendar Horário</h2>
-              
-              {message && (
-                <Alert type={message.includes("sucesso") ? "success" : "danger"}>
-                  {message}
-                </Alert>
-              )}
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const telefonePadronizado = padronizarTelefone(formData.telefone);
 
-              <form onSubmit={handleSubmit}>
-                <Input
-                  id="nome"
-                  name="nome"
-                  label="Nome completo"
-                  placeholder="Seu nome"
-                  value={formData.nome}
-                  onChange={handleChange}
-                  required
-                />
+            const requestData = {
+              ...formData,
+              telefone: telefonePadronizado,
+            };
+            const response = await axios.post("http://127.0.0.1:5000/agendar", requestData);
+            setMensagem(response.data.msg);
+            setFormData({ nome: "", telefone: "", data: "", hora: "" });
+        } catch (error) {
+        setMensagem(error.response?.data?.msg || "Erro ao realizar o agendamento.");
+        }
+        setTimeout(() => {
+            setMensagem("");
+        }, 5000);
+    };
 
-                <Input
-                  id="telefone"
-                  name="telefone"
-                  type="tel"
-                  label="Telefone"
-                  placeholder="(11) 99999-9999"
-                  value={formData.telefone}
-                  onChange={handleChange}
-                  pattern="^[0-9]{9,11}$"
-                  required
-                />
-
-                <Input
-                  id="data"
-                  name="data"
-                  type="date"
-                  label="Data do agendamento"
-                  value={formData.data}
-                  onChange={handleChange}
-                  required
-                />
-
-                <Input
-                  id="hora"
-                  name="hora"
-                  type="time"
-                  label="Horário"
-                  value={formData.hora}
-                  onChange={handleChange}
-                  required
-                />
-
-                <Button
-                  type="submit"
-                  variant="primary"
-                  className="w-100"
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Agendando..." : "Confirmar Agendamento"}
-                </Button>
-              </form>
-            </Card>
-          </div>
+    return (
+        <div className= 'container-fluid w-50 justify-content-center'>
+            <div className="mt-5">
+                <h2 className="mb-4">Agendar Horário</h2>
+                <form onSubmit={handleSubmit} className="mb-5">
+                    <div className="mb-3">
+                        <label htmlFor="nome" className="form-label">Nome</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="nome"
+                            name="nome"
+                            value={formData.nome}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="telefone" className="form-label">Telefone</label>
+                        <input
+                            type="tel"
+                            className="form-control"
+                            id="telefone"
+                            name="telefone"
+                            value={formData.telefone}
+                            pattern="^[0-9]{9,11}$"
+                            onkeypress="return /^[0-9]*$/.test(event.key)"
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div className="mb-3">
+                    <label htmlFor="data" className="form-label">Data</label>
+                    <input
+                        type="date"
+                        className="form-control"
+                        id="data"
+                        name="data"
+                        value={formData.data}
+                        onChange={handleChange}
+                        required
+                    />
+                    </div>
+                    <div className="mb-3">
+                    <label htmlFor="hora" className="form-label">Hora</label>
+                    <input
+                        type="time"
+                        className="form-control"
+                        id="hora"
+                        name="hora"
+                        value={formData.hora}
+                        onChange={handleChange}
+                        required
+                    />
+                    </div>
+                    <button type="submit" className="btn btn-primary">Agendar</button>
+                </form>
+            {mensagem && <div className="alert alert-info mt-3">{mensagem}</div>}
+            </div>
         </div>
-      </Container>
-    </Section>
-  );
-}
+    );
+};
 
 export default Schedule;

@@ -1,11 +1,11 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import NavBar from './components/layout/NavBar';
-import Footer from './components/layout/Footer';
-import Container from './components/layout/Container';
-import ScrollToTop from './components/ScrollToTop';
-import ProtectedRoute from './components/ProtectedRoute';
+// import logo from './logo.svg';
+import './App.css';
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 
-// Pages
+import NavBar from './components/layout/NavBar/NavBar';
+import Footer from './components/layout/Footer/Footer';
+import Container from './components/layout/Container/Container'
+
 import Home from './components/pages/Home';
 import About from './components/pages/About';
 import Help from './components/pages/Help';
@@ -16,26 +16,30 @@ import Developers from './components/pages/Developers';
 import UserPage from './components/pages/UserPage';
 import Register from './components/pages/Register';
 
+import ScrollToTop from './components/ScrollToTop';
+import ProtectedRoute from './components/ProtectedRoute';
+
+
 function App() {
   return (
     <Router>
       <ScrollToTop />
       <NavBar />
-      <main>
+      <Container>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" exact element={<Home />} />
           <Route path="/sobre-nos" element={<About />} />
-          <Route path="/ajuda" element={<Help />} />
-          <Route path="/agendar" element={<Schedule />} />
-          <Route path="/acesso" element={<Access />} />
+          <Route path="/ajuda" element={<Help />}/>
+          <Route path="/agendar" element={<Schedule />}/>
+          <Route path="/acesso" element={<Access />}/>
           <Route path="/novidades" element={<News />} />
           <Route path="/desenvolvedores" element={<Developers />} />
-          <Route path="/registro" element={<Register />} />
           <Route element={<ProtectedRoute />}>
-            <Route path="/inicio" element={<UserPage />} />
+            <Route path="/inicio" element={<UserPage/>} />
           </Route>
+          <Route path="/registro" element={<Register />}></Route>
         </Routes>
-      </main>
+      </Container>
       <Footer />
     </Router>
   );

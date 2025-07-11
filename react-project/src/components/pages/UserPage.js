@@ -1,137 +1,111 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../../services/authService";
-import Container from "../layout/Container";
-import Button from "../ui/Button";
-import styles from "./UserPage.module.css";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-const tabs = [
-  { id: "perfil", label: "Perfil", icon: "fas fa-user" },
-  { id: "configuracoes", label: "Configurações", icon: "fas fa-cog" },
-  { id: "historico", label: "Histórico", icon: "fas fa-history" }
-];
+import styles from "./UserPage.module.css";
+import { logout } from "../../services/authService";
 
 function UserPage() {
-  const [activeTab, setActiveTab] = useState("perfil");
-  const navigate = useNavigate();
+    const navigate = useNavigate();
+    const [abaAtiva, setAbaAtiva] = useState("perfil");
 
-  const handleLogout = () => {
-    logout();
-    navigate("/");
-  };
+    // const [agendamentos, setAgendamentos] = useState([]);
+    // const [mensagem, setMensagem] = useState("");
+  
+    // useEffect(() => {
+    //   const fetchAgendamentos = async () => {
+    //     try {
+    //       const token = localStorage.getItem("token"); // Obtém o token JWT armazenado
+    //       const response = await axios.get("http://127.0.0.1:5000/agendamentos_passados", {
+    //         headers: { Authorization: `Bearer ${token}` },
+    //       });
+    //       setAgendamentos(response.data.agendamentos);
+    //     } catch (error) {
+    //       setMensagem(error.response?.data?.msg || "Erro ao carregar agendamentos.");
+    //     }
+    //   };
+  
+    //   fetchAgendamentos();
+    // }, []);
 
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case "perfil":
-        return (
-          <div>
-            <h4>Perfil do Usuário</h4>
-            <p>Gerencie suas informações pessoais e preferências.</p>
-            <div className="row">
-              <div className="col-md-6">
-                <div className="card">
-                  <div className="card-body">
-                    <h5 className="card-title">Informações Básicas</h5>
-                    <p className="card-text">Atualize seus dados pessoais.</p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6">
-                <div className="card">
-                  <div className="card-body">
-                    <h5 className="card-title">Preferências</h5>
-                    <p className="card-text">Configure suas preferências de notificação.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      case "configuracoes":
-        return (
-          <div>
-            <h4>Configurações</h4>
-            <p>Personalize sua experiência na plataforma.</p>
-            <div className="row">
-              <div className="col-md-4">
-                <div className="card">
-                  <div className="card-body">
-                    <h5 className="card-title">Serviços</h5>
-                    <p className="card-text">Gerencie seus serviços e preços.</p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="card">
-                  <div className="card-body">
-                    <h5 className="card-title">Horários</h5>
-                    <p className="card-text">Configure seus horários de funcionamento.</p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="card">
-                  <div className="card-body">
-                    <h5 className="card-title">Notificações</h5>
-                    <p className="card-text">Personalize suas notificações.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      case "historico":
-        return (
-          <div>
-            <h4>Histórico de Agendamentos</h4>
-            <p>Visualize todos os seus agendamentos anteriores.</p>
-            <div className="alert alert-info">
-              <i className="fas fa-info-circle me-2"></i>
-              Funcionalidade em desenvolvimento. Em breve você poderá visualizar todo o histórico de agendamentos.
-            </div>
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
+    const handleLogout = () => {
+      logout();
+      navigate("/");
+    };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <Container>
-          <div className="d-flex justify-content-between align-items-center">
-            <h3 className="mb-0 text-white">Painel do Usuário</h3>
-            <Button variant="secondary" onClick={handleLogout}>
-              <i className="fas fa-sign-out-alt me-2"></i>
-              Sair
-            </Button>
-          </div>
-        </Container>
-      </div>
-
-      <Container>
-        <div className={styles.content}>
-          <ul className={`nav nav-tabs ${styles.tabs}`}>
-            {tabs.map((tab) => (
-              <li key={tab.id} className="nav-item">
-                <button
-                  className={`nav-link ${activeTab === tab.id ? styles.active : styles.inactive}`}
-                  onClick={() => setActiveTab(tab.id)}
-                >
-                  <i className={`${tab.icon} me-2`}></i>
-                  {tab.label}
-                </button>
-              </li>
-            ))}
+      <div className="d-flex flex-column align-items-center vh-100">
+        {/* Barra de Navegação */}
+        <div className="bg-danger text-white p-3 w-100 text-center shadow">
+          <h3 className="mb-0">Painel do Usuário</h3>
+        </div>
+  
+        {/* Contêiner das Abas */}
+        <div className="mt-4 vw-70">
+          <ul className="nav nav-tabs justify-content-center bg-light p-2 rounded shadow">
+            <li className="nav-item">
+              <button
+                className={`nav-link ${abaAtiva === "perfil" ? styles.activeCss : styles.inactiveCss}`}
+                onClick={() => setAbaAtiva("perfil")}
+              >
+                Perfil
+              </button>
+            </li>
+            <li className="nav-item">
+              <button
+                className={`nav-link ${abaAtiva === "configuracoes" ? styles.activeCss : styles.inactiveCss}`}
+                onClick={() => setAbaAtiva("configuracoes")}
+              >
+                Configurações
+              </button>
+            </li>
+            <li className="nav-item">
+              <button
+                className={`nav-link ${abaAtiva === "historico" ? styles.activeCss : styles.inactiveCss}`}
+                onClick={() => setAbaAtiva("historico")}
+              >
+                Histórico
+              </button>
+            </li>
           </ul>
-
-          <div className={styles.tabContent}>
-            {renderTabContent()}
+  
+          {/* Conteúdo das Abas */}
+          <div className="tab-content mt-3 bg-white p-4 rounded shadow">
+            {abaAtiva === "perfil" && (
+              <div className="tab-pane fade show active">
+                <h4>Perfil do Usuário</h4>
+                <p>Aqui ficam as informações do perfil do usuário.</p>
+              </div>
+            )}
+            {abaAtiva === "configuracoes" && (
+              <div className="tab-pane fade show active">
+                <h4>Configurações</h4>
+                <p>Aqui o usuário pode alterar as configurações.</p>
+              </div>
+            )}
+            {abaAtiva === "historico" && (
+              <div className="tab-pane fade show active">
+                <h4>Histórico de Agendamentos</h4>
+                <div className="container mt-5">
+                  <h2 className="mb-4">Agendamentos Passados</h2>
+                  {/* {mensagem && <div className="alert alert-danger">{mensagem}</div>}
+                  <ul className="list-group">
+                    {agendamentos.map((agendamento, index) => (
+                      <li key={index} className="list-group-item">
+                        <strong>Data:</strong> {agendamento.data} <br />
+                        <strong>Hora:</strong> {agendamento.hora}
+                      </li>
+                    ))}
+                  </ul> */}
+                </div>
+              </div>
+            )}
           </div>
         </div>
-      </Container>
-    </div>
+        <button className="btn btn-danger" onClick={handleLogout}>Sair</button>
+      </div>
+      
+
   );
 }
 

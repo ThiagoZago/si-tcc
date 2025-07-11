@@ -1,100 +1,90 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { login } from "../../services/authService";
-import Card from "../ui/Card";
-import Input from "../ui/Input";
-import Button from "../ui/Button";
-import Alert from "../ui/Alert";
 import styles from "./Access.module.css";
 
 function Access() {
-  const [formData, setFormData] = useState({
-    username: "",
-    password: ""
-  });
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [message, setMessage] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
+  useEffect(() => {
+    // Adiciona uma classe que aplica a animação após o componente ser montado
+    const card = document.querySelector(`.${styles.card}`);
+    if (card) {
+      card.classList.add(styles.showCard);
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    
-    const response = await login(formData.username, formData.password);
+    const response = await login(username, password);
 
     if (response.token) {
-      setIsSuccess(true);
+      setSuccess(true);
       setMessage(response.msg);
-      setTimeout(() => navigate("/inicio"), 2000);
+      setTimeout(() => {
+        navigate("/inicio");
+      }, 3000)
+      
     } else {
       setMessage(response.msg);
-      setTimeout(() => setMessage(""), 3000);
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000)
     }
-    
-    setIsLoading(false);
   };
 
   return (
-    <div className={styles.container}>
-      <div className="col-12 col-md-6 col-lg-4">
-        <Card animated>
-          <h2 className="text-center mb-4">Acesse sua conta</h2>
-          
-          {message && (
-            <Alert type={isSuccess ? "success" : "danger"}>
-              {message}
-            </Alert>
-          )}
-
+    <div className={`${styles.gradiente} d-flex justify-content-center align-items-center vh-100`}>
+      <div className={`${styles.card} col-4 card p-4 shadow`} >
+          <h2 className="text-center mb-4">Acesse já</h2>
+          {message && <div className={success ? "alert alert-success text-center" : "alert alert-danger text-center"}>{message}</div>}
           <form onSubmit={handleSubmit}>
-            <Input
-              id="username"
-              name="username"
-              type="email"
-              label="Email"
-              placeholder="seu@email.com"
-              value={formData.username}
-              onChange={handleChange}
-              required
-            />
-
-            <Input
-              id="password"
-              name="password"
-              label="Senha"
-              placeholder="Sua senha"
-              value={formData.password}
-              onChange={handleChange}
-              showPasswordToggle
-              required
-            />
-
-            <Button
-              type="submit"
-              variant="primary"
-              className="w-100 mb-3"
-              disabled={isLoading}
-            >
-              {isLoading ? "Entrando..." : "Entrar"}
-            </Button>
+              <div className="mb-3 form-floating">
+                <input
+                  id="floatingEmail"
+                  type="email"
+                  placeholder="Email"
+                  className="form-control"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                />
+                <label for="floatingEmail">Email</label>
+              </div>
+              <div className="mb-3">
+                <div className="input-group form-floating">
+                    <input
+                      id="floatingPassword"
+                      type={showPassword ? "text" : "password"} // Alterna o tipo do input
+                      placeholder="Senha"
+                      className="form-control"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <label for="floatingPassword">Senha</label>
+                    <button
+                      type="button"
+                      className="btn btn-outline-secondary"
+                      onClick={() => setShowPassword(!showPassword)} // Alterna o estado
+                    >
+                      {showPassword ? "Ocultar" : "Mostrar"}
+                    </button>
+                  </div>
+              </div>
+            <button type="submit" className="btn btn-dark w-100">Entrar</button>
           </form>
 
-          <div className="text-center">
-            <p className="mb-2">Ainda não tem uma conta?</p>
-            <Link to="/registro" className="btn btn-outline-danger w-100">
-              Criar Conta
-            </Link>
+          {/* Botão para registro */}
+          <div className="mt-5">
+            <p className="text-center">Ainda não tem uma conta?</p>
+            <Link to="/registro" className="btn btn-danger w-100">Criar Conta</Link>
           </div>
-        </Card>
-      </div>
+        </div>
     </div>
   );
 }
