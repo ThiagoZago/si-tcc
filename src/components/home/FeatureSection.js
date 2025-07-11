@@ -1,29 +1,54 @@
-@@ .. @@
- import { useState, useEffect, useRef } from 'react';
- import Button from '../ui/Button';
--import Container from '../layout/Container';
--import Section from '../layout/Section';
- import styles from './FeatureSection.module.css';
+import { useState, useEffect, useRef } from 'react';
+import Button from '../ui/Button';
+import styles from './FeatureSection.module.css';
 
- function FeatureSection({ 
-@@ .. @@
-   };
+function FeatureSection({ 
+  title,
+  description,
+  image,
+  background,
+  reverse,
+  buttonText,
+  buttonLink,
+  onButtonClick
+}) {
+  const sectionRef = useRef(null);
 
-   return (
--    <Section background={background}>
--      <Container>
-+    <section className="py-5" style={{ backgroundColor: background }}>
-+      <div className="container">
-         <div 
-           ref={sectionRef}
-           className={`row align-items-center ${styles.feature} ${
-@@ -65,8 +63,8 @@ function FeatureSection({
-             />
-           </div>
-         </div>
--      </Container>
--    </Section>
-+      </div>
-+    </section>
-   );
- }
+  const handleButtonClick = () => {
+    if (onButtonClick) {
+      onButtonClick();
+    }
+  };
+
+  return (
+    <section className="py-5" style={{ backgroundColor: background }}>
+      <div className="container">
+        <div 
+          ref={sectionRef}
+          className={`row align-items-center ${styles.feature} ${
+            reverse ? styles.reverse : ''
+          }`}>
+          <div className="col-lg-6">
+            <h2>{title}</h2>
+            <p>{description}</p>
+            {buttonText && (
+              <Button
+                onClick={handleButtonClick}
+                href={buttonLink}
+              >
+                {buttonText}
+              </Button>
+            )}
+          </div>
+          <div className="col-lg-6">
+            <img
+              src={image}
+              alt={title}
+              className="img-fluid"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
