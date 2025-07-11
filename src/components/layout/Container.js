@@ -10,5 +10,3 @@
      </div>
    );
  }
-
-export default Container

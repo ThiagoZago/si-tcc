@@ -129,5 +129,3 @@
 +    </button>
 +  );
 +}
-
-export default Button
