@@ -41,7 +41,6 @@ function NavBar() {
                   {item.label}
                 </Link>
                 {index === 2 && <li className="nav-item divisor"></li>}
-                }
               </li>
             ))}
           </ul>
