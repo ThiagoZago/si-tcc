@@ -15,6 +15,7 @@ import News from './components/pages/News';
 import Developers from './components/pages/Developers';
 import UserPage from './components/pages/UserPage';
 import Register from './components/pages/Register';
+import RegisterBusiness from './components/pages/registerBusiness/RegisterBusiness'
 
 import ScrollToTop from './components/ScrollToTop';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -38,6 +39,7 @@ function App() {
             <Route path="/inicio" element={<UserPage/>} />
           </Route>
           <Route path="/registro" element={<Register />}></Route>
+          <Route path="/configuracao-empresa" element={<RegisterBusiness />}></Route>
         </Routes>
       </Container>
       <Footer />

@@ -81,6 +81,7 @@ function UserPage() {
               <div className="tab-pane fade show active">
                 <h4>Configurações</h4>
                 <p>Aqui o usuário pode alterar as configurações.</p>
+                <button onClick={() => navigate("/configuracao-empresa")}>Configure aqui</button>
               </div>
             )}
             {abaAtiva === "historico" && (
