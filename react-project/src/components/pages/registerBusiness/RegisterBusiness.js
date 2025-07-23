@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import Step1DadosBasicos from './Step1';
 import Step2Profissionais from './Step2';
 import Step3Servicos from './Step3';
 import Step4Revisao from './Step4';
 
 function CadastroEstabelecimento() {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [business, setBusiness] = useState({
     name: '', type: '', phone: '', email: '', description: '',
@@ -21,6 +23,7 @@ function CadastroEstabelecimento() {
     const config = { business, professionals, services };
     console.log('Salvar configuração:', config);
     alert('Configuração salva com sucesso!');
+    navigate("/inicio");
   };
 
   return (
