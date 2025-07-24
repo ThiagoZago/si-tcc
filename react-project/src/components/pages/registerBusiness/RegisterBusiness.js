@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+
 import Step1DadosBasicos from './Step1';
 import Step2Profissionais from './Step2';
 import Step3Servicos from './Step3';
@@ -19,12 +21,19 @@ function CadastroEstabelecimento() {
   const nextStep = () => step < 4 && setStep(step + 1);
   const prevStep = () => step > 1 && setStep(step - 1);
   const goToStep = (targetStep) => targetStep < step && setStep(targetStep);
-  const handleSave = () => {
+  const handleSave = async () => {
     const config = { business, professionals, services };
-    console.log('Salvar configuração:', config);
-    alert('Configuração salva com sucesso!');
-    navigate("/inicio");
-  };
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.post('http://127.0.0.1:5000/business', config, { headers : {Authorization: `Bearer ${token}`}});
+        console.log(response.data);
+        alert('Configuração salva com sucesso!');
+        navigate("/inicio");
+      } catch (error) {
+        console.error('Erro ao salvar:', error);
+        alert('Erro ao salvar. Tente novamente.');
+      }
+    };
 
   return (
     <div className="container py-5">
