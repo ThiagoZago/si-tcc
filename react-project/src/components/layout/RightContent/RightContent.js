@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import BtnComponent from '../../BtnComponent';
 import styles from './RightContent.module.css';
 
