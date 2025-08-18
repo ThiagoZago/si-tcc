@@ -1,4 +1,4 @@
-function Step1DadosBasicos({ business, setBusiness, nextStep }) {
+function Step1DadosBasicos({ business, setBusiness, nextStep, deleteBusiness }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setBusiness({ ...business, [name]: value });
@@ -65,7 +65,11 @@ function Step1DadosBasicos({ business, setBusiness, nextStep }) {
             <input type="text" name="state" value={business.address.state} onChange={handleAddressChange} className="form-control" />
           </div>
         </div>
-        <button type="submit" className="btn btn-primary">Próximo</button>
+        <div className="d-flex justify-content-between mt-4">
+          <button type="button" className="btn btn-danger" onClick={deleteBusiness}>Deletar</button>
+          <button type="button" className="btn btn-primary" onClick={nextStep}>Próximo</button>
+        </div>
+        
       </form>
     </div>
   );

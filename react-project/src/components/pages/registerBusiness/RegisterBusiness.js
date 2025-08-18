@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
@@ -16,24 +16,84 @@ function CadastroEstabelecimento() {
   });
   const [professionals, setProfessionals] = useState([]);
   const [services, setServices] = useState([]);
+  const [existingBusiness, setExistingBusiness] = useState(false);
+
 
   const steps = ['Dados Básicos', 'Profissionais', 'Serviços', 'Revisão'];
   const nextStep = () => step < 4 && setStep(step + 1);
   const prevStep = () => step > 1 && setStep(step - 1);
   const goToStep = (targetStep) => targetStep < step && setStep(targetStep);
-  const handleSave = async () => {
-    const config = { business, professionals, services };
-      try {
-        const token = localStorage.getItem('token');
-        const response = await axios.post('http://127.0.0.1:5000/business', config, { headers : {Authorization: `Bearer ${token}`}});
-        console.log(response.data);
-        alert('Configuração salva com sucesso!');
-        navigate("/inicio");
-      } catch (error) {
-        console.error('Erro ao salvar:', error);
-        alert('Erro ao salvar. Tente novamente.');
-      }
+
+  const handleSaveOrUpdate = async () => {
+    const config = {
+      business,
+      professionals: professionals || [],
+      services: services || []
     };
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = existingBusiness
+      ? await axios.put('http://127.0.0.1:5000/business', config, { headers: { Authorization: `Bearer ${token}` } })
+      : await axios.post('http://127.0.0.1:5000/business', config, { headers: { Authorization: `Bearer ${token}` } });
+
+      console.log("Sucesso:", response.data);
+      alert(existingBusiness ? 'Estabelecimento atualizado!' : 'Estabelecimento criado!');
+      setExistingBusiness(true); // garante que futuras edições usarão PUT
+      navigate("/inicio");
+    } catch (error) {
+        console.error("Erro ao salvar/atualizar:", error.response?.data || error.message);
+        alert(`Erro: ${error.response?.data?.error || error.message}`);
+      }
+  };
+
+  const fetchBusiness = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+      const response = await axios.get(
+        'http://127.0.0.1:5000/business',
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      // Ajusta os estados
+      setBusiness(response.data.business || {});
+      setProfessionals(response.data.professionals || []);
+      setServices(response.data.services || []);
+      setExistingBusiness(true);
+    } catch (error) {
+      if (error.response?.status === 404) {
+        setExistingBusiness(false);
+      }else{
+        console.error("Erro ao carregar:", error.response?.data || error.message);
+      // Se der 404, significa que não tem cadastro ainda
+      }
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm("Tem certeza que deseja excluir seu estabelecimento?")) return;
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.delete(
+        'http://127.0.0.1:5000/business',
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      console.log("Excluído:", response.data);
+      alert("Estabelecimento removido com sucesso!");
+      navigate("/inicio");
+    } catch (error) {
+      console.error("Erro ao excluir:", error.response?.data || error.message);
+      alert(`Erro ao excluir: ${error.response?.data?.error || error.message}`);
+    }
+  };
+
+  useEffect(() => {
+    fetchBusiness();
+  }, []); // [] garante que roda apenas uma vez, ao montar
+
+
 
   return (
     <div className="container py-5">
@@ -68,12 +128,13 @@ function CadastroEstabelecimento() {
         })}
       </div>
 
-      {step === 1 && <Step1DadosBasicos business={business} setBusiness={setBusiness} nextStep={nextStep} />}
+      {step === 1 && <Step1DadosBasicos business={business} setBusiness={setBusiness} nextStep={nextStep} deleteBusiness={handleDelete} />}
       {step === 2 && <Step2Profissionais professionals={professionals} setProfessionals={setProfessionals} prevStep={prevStep} nextStep={nextStep} />}
       {step === 3 && <Step3Servicos professionals={professionals} services={services} setServices={setServices} prevStep={prevStep} nextStep={nextStep} />}
-      {step === 4 && <Step4Revisao business={business} professionals={professionals} services={services} prevStep={prevStep} onSave={handleSave} />}
+      {step === 4 && <Step4Revisao business={business} professionals={professionals} services={services} prevStep={prevStep} onSave={handleSaveOrUpdate} />}
     </div>
   );
+  
 }
 
 export default CadastroEstabelecimento;
