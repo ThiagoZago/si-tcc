@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, get_jwt_identity
 from app.models.user_model import create_user, check_user_exists
 from app.middlewares.validation_register import validate_username, validate_password
+from datetime import timedelta
 
 def register(request):
     data = request.get_json() # Obtém os dados enviados pelo cliente
@@ -34,7 +35,7 @@ def login(request):
     if not user or not check_password_hash(user["password"], data["password"]):
         return jsonify({"msg": "Credenciais inválidas"}), 401
 
-    access_token = create_access_token(identity=data["username"])
+    access_token = create_access_token(identity=data["username"], expires_delta=timedelta(days=7))
     return jsonify({"token": access_token, "msg":"Redirecionando..."}), 200
 
 def dashboard():
