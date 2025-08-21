@@ -6,6 +6,7 @@ import Step1DadosBasicos from './Step1';
 import Step2Profissionais from './Step2';
 import Step3Servicos from './Step3';
 import Step4Revisao from './Step4';
+// import Step5Availability from './Step5';
 
 function CadastroEstabelecimento() {
   const navigate = useNavigate();
