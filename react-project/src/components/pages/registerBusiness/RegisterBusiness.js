@@ -55,6 +55,7 @@ function CadastroEstabelecimento() {
         'http://127.0.0.1:5000/business',
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      console.log("Jsonfy: ", response.data)
 
       // Ajusta os estados
       setBusiness(response.data.business || {});

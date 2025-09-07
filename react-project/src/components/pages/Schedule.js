@@ -22,7 +22,7 @@ function Schedule() {
   useEffect(() => {
     const fetchBusinesses = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:5000/business");
+        const response = await axios.get("http://127.0.0.1:5000/businessSchedule");
         setBusinesses(response.data);
       } catch (error) {
         console.error("Erro ao carregar locais:", error);
@@ -37,7 +37,7 @@ function Schedule() {
     const fetchProfessionals = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:5000/business/${formData.businessId}/professionals`
+          `http://127.0.0.1:5000/businessSchedule/${formData.businessId}/professionals`
         );
         setProfessionals(response.data);
       } catch (error) {
@@ -53,7 +53,7 @@ function Schedule() {
     const fetchServices = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:5000/business/${formData.businessId}/services`
+          `http://127.0.0.1:5000/businessSchedule/${formData.businessId}/services`
         );
         setServices(response.data);
       } catch (error) {
