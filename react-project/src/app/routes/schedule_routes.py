@@ -141,8 +141,17 @@ def agendar():
     livres = [h for h in possiveis if h not in ocupados]
 
     # Verifica se o horário solicitado é válido
+    try:
+        hora_str = datetime.strptime(hora_str, "%H:%M").strftime("%H:%M")
+    except ValueError:
+        return res_json({"msg": "Formato de hora inválido. Use HH:MM."}, 400)
+
     if hora_str not in livres:
-        return res_json({"msg": "Horário indisponível para este profissional."}, 409)
+        return res_json({
+            "msg": "Horário indisponível para este profissional.",
+            "livres": livres  # 👈 debug temporário, mostra horários disponíveis
+        }, 409)
+
 
     # Monta documento
     agendamento = {

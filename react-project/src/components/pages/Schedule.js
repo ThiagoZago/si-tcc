@@ -14,6 +14,7 @@ function Schedule() {
   });
 
   const [mensagem, setMensagem] = useState("");
+  const [livres, setLivres] = useState("");
   const [businesses, setBusinesses] = useState([]);
   const [professionals, setProfessionals] = useState([]);
   const [services, setServices] = useState([]);
@@ -96,10 +97,12 @@ function Schedule() {
       setServices([]);
     } catch (error) {
       setMensagem(error.response?.data?.msg || "Erro ao realizar o agendamento.");
+      setLivres(error.response?.data?.livres || "Erro ao analisar horários disponíveis.");
     }
 
     setTimeout(() => {
       setMensagem("");
+      setLivres("");
     }, 5000);
   };
 
@@ -239,6 +242,7 @@ function Schedule() {
           </button>
         </form>
         {mensagem && <div className="alert alert-info mt-3">{mensagem}</div>}
+        {livres && <div className="alert alert-info mt-3">{livres}</div>}
       </div>
     </div>
   );
