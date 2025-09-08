@@ -212,53 +212,69 @@ def horarios_disponiveis(id, professional):
 # Slots livres (teóricos) para um dia, considerando agenda atual
 # Ex.: GET /businessSchedule/<id>/slots?professional=JONATHAN&service=CORTE%20COMPLETO&date=2025-09-10
 @bp.route("/businessSchedule/<id>/slots", methods=["GET"])
-def slots_por_dia():
-    id = request.view_args.get("id")
+def slots_por_dia(id):
+    """
+    Endpoint: GET /businessSchedule/<id>/slots?professional=...&service=...&date=YYYY-MM-DD
+    Retorna lista de horários livres (["09:00","09:30",...])
+    """
     professional = request.args.get("professional")
     service = request.args.get("service")
-    date_str = request.args.get("date")  # YYYY-MM-DD
+    date_str = request.args.get("date")  # note: frontend envia "date"
 
-    # validação básica
+    # Valida parâmetros
     if not all([id, professional, service, date_str]):
         return res_json({"msg": "Parâmetros: professional, service e date são obrigatórios."}, 400)
 
+    # Converte id para ObjectId
     _id = to_object_id(id)
     if not _id:
         return res_json({"msg": "ID inválido."}, 400)
 
-    # carrega business
-    business = mongo.db.business.find_one({"_id": _id})
-    if not business:
-        return res_json({"msg": "Estabelecimento não encontrado"}, 404)
+    try:
+        # carrega business
+        business = mongo.db.business.find_one({"_id": _id})
+        if not business:
+            return res_json({"msg": "Estabelecimento não encontrado"}, 404)
 
-    # profissional
-    prof = next((p for p in business.get("professionals", []) if p.get("name") == professional), None)
-    if not prof:
-        return res_json({"msg": "Profissional não encontrado"}, 404)
+        # profissional
+        prof = next((p for p in business.get("professionals", []) if p.get("name") == professional), None)
+        if not prof:
+            return res_json({"msg": "Profissional não encontrado"}, 404)
 
-    # serviço (confere vínculo com profissional)
-    serv = next(
-        (s for s in business.get("services", [])
-         if s.get("name") == service and s.get("professional") == professional),
-        None
-    )
-    if not serv:
-        return res_json({"msg": "Serviço não encontrado para esse profissional."}, 404)
+        # serviço (confere vínculo com profissional)
+        serv = next(
+            (s for s in business.get("services", [])
+             if s.get("name") == service and s.get("professional") == professional),
+            None
+        )
+        if not serv:
+            return res_json({"msg": "Serviço não encontrado para esse profissional."}, 404)
 
-    # disponibilidade do dia
-    dia_key = dia_semana_pt(date_str)
-    availability = prof.get("availability", {}).get(dia_key, {"active": False})
+        # disponibilidade do dia (valida formato de data)
+        try:
+            dia_key = dia_semana_pt(date_str)
+        except Exception:
+            return res_json({"msg": "Formato de data inválido. Use YYYY-MM-DD."}, 400)
 
-    # slots possíveis pelo expediente
-    possiveis = gerar_slots_disponiveis(availability, serv.get("duration", "30min"), date_str)
+        availability = prof.get("availability", {}).get(dia_key, {"active": False})
 
-    # remove horários já ocupados
-    agendados_cur = mongo.db.schedules.find({
-        "businessId": _id,
-        "professional": professional,
-        "data": date_str
-    }, {"hora": 1})
-    ocupados = {a.get("hora") for a in agendados_cur}
-    livres = [h for h in possiveis if h not in ocupados]
+        # slots possíveis pelo expediente
+        possiveis = gerar_slots_disponiveis(availability, serv.get("duration", "30min"), date_str)
 
-    return res_json(livres, 200)
+        # remove horários já ocupados
+        agendados_cur = mongo.db.schedules.find({
+            "businessId": _id,
+            "professional": professional,
+            "data": date_str
+        }, {"hora": 1})
+
+        ocupados = {a.get("hora") for a in agendados_cur if a.get("hora")}
+        livres = [h for h in possiveis if h not in ocupados]
+
+        return res_json(livres, 200)
+
+    except Exception as e:
+        # opcional: print/registro para debug no terminal
+        import traceback
+        traceback.print_exc()
+        return res_json({"msg": "Erro interno do servidor.", "error": str(e)}, 500)
