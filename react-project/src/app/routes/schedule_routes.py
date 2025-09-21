@@ -170,6 +170,30 @@ def agendar():
     return res_json({"msg": "Agendamento realizado com sucesso!", "id": str(inserted.inserted_id)}, 201)
 
 
+@bp.route('/business/search', methods=['GET'])
+def search_business():
+    termo = request.args.get('q', '')
+
+    results = mongo.db.business.find(
+        {"business.name": {"$regex": termo, "$options": "i"}},
+        {"_id": 1, "business.name": 1, "business.address": 1}
+    ).limit(10)
+
+    negocios = []
+    for r in results:
+        endereco = r.get("business", {}).get("address", {})
+        endereco_str = f"{endereco.get('street', '')}, {endereco.get('number', '')} - {endereco.get('city', '')}/{endereco.get('state', '')}"
+
+        negocios.append({
+            "id": str(r["_id"]),
+            "name": r["business"]["name"],
+            "address": endereco_str.strip(", -/")  # remove vírgulas/traços sobrando
+        })
+
+    return jsonify(negocios), 200
+
+
+
 @bp.route("/businessSchedule", methods=["GET"])
 def listar_business():
     businesses = list(mongo.db.business.find({}, {"_id": 1, "business.name": 1}))
@@ -278,3 +302,87 @@ def slots_por_dia(id):
         import traceback
         traceback.print_exc()
         return res_json({"msg": "Erro interno do servidor.", "error": str(e)}, 500)
+
+# ANTES DO USUÁRIO ESCOLHER A DATA, A LÓGICA JÁ DISPARA APENAS OS DIAS DISPONÍVEIS PARA MARCAÇÃO.
+@bp.route("/businessSchedule/<id>/days", methods=["GET"])
+def dias_disponiveis(id):
+    """
+    Endpoint: GET /businessSchedule/<id>/days?professional=...&service=...&days=30
+    Retorna uma lista de dias com flag de disponibilidade:
+    [
+      {"date": "2025-09-20", "available": true},
+      {"date": "2025-09-21", "available": false},
+      ...
+    ]
+    """
+    professional = request.args.get("professional")
+    service = request.args.get("service")
+    dias_qtd = int(request.args.get("days", 30))  # padrão: 30 dias pra frente
+
+    # validações
+    if not all([id, professional, service]):
+        return res_json({"msg": "Parâmetros: professional e service são obrigatórios."}, 400)
+
+    _id = to_object_id(id)
+    if not _id:
+        return res_json({"msg": "ID inválido."}, 400)
+
+    try:
+        business = mongo.db.business.find_one({"_id": _id})
+        if not business:
+            return res_json({"msg": "Estabelecimento não encontrado"}, 404)
+
+        # profissional
+        prof = next((p for p in business.get("professionals", []) if p.get("name") == professional), None)
+        if not prof:
+            return res_json({"msg": "Profissional não encontrado"}, 404)
+
+        # serviço (checar vínculo com profissional)
+        serv = next(
+            (s for s in business.get("services", [])
+             if s.get("name") == service and s.get("professional") == professional),
+            None
+        )
+        if not serv:
+            return res_json({"msg": "Serviço não encontrado para esse profissional."}, 404)
+
+        # agora vamos montar a lista de dias
+        from datetime import datetime, timedelta
+
+        resultados = []
+        hoje = datetime.today()
+
+        for i in range(dias_qtd):
+            dia_atual = hoje + timedelta(days=i)
+            dia_str = dia_atual.strftime("%Y-%m-%d")
+            dia_key = dia_semana_pt(dia_str)
+
+            availability = prof.get("availability", {}).get(dia_key, {"active": False})
+            disponivel = availability.get("active", False)
+
+            if disponivel:
+                # gera slots possíveis
+                possiveis = gerar_slots_disponiveis(availability, serv.get("duration", "30min"), dia_str)
+
+                # remove os já ocupados
+                agendados_cur = mongo.db.schedules.find({
+                    "businessId": _id,
+                    "professional": professional,
+                    "data": dia_str
+                }, {"hora": 1})
+
+                ocupados = {a.get("hora") for a in agendados_cur if a.get("hora")}
+                livres = [h for h in possiveis if h not in ocupados]
+
+                disponivel = len(livres) > 0
+
+            resultados.append({"date": dia_str, "available": disponivel})
+
+        return res_json(resultados, 200)
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return res_json({"msg": "Erro interno do servidor", "error": str(e)}, 500)
+
+
