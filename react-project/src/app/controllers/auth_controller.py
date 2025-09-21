@@ -33,10 +33,10 @@ def login(request):
     user = mongo.db.system.find_one({"username": data["username"]})
 
     if not user or not check_password_hash(user["password"], data["password"]):
-        return jsonify({"msg": "Credenciais inválidas"}), 401
+        return jsonify({"msg": "Erro ao efetuar login. Verifique suas credenciais."}), 401
 
     access_token = create_access_token(identity=data["username"], expires_delta=timedelta(days=7))
-    return jsonify({"token": access_token, "msg":"Redirecionando..."}), 200
+    return jsonify({"token": access_token, "msg":"Login realizado com sucesso! Redirecionando."}), 200
 
 def dashboard():
     return jsonify({"msg": "Acesso permitido ao dashboard"}), 200

@@ -357,33 +357,49 @@ function Schedule() {
           </div>
 
           <div className="mb-3">
-            
+            <label className="form-label d-flex justify-content-center fw-bold mb-4">
+              Horários disponíveis
+            </label>
 
-            {slotsLoading && (
-              
-              <div className="d-flex justify-content-center my-2">
-                <div className="spinner-border me-2" role="status" aria-hidden="true"></div>
-                <div>Carregando horários...</div>
+            {/* Mensagem inicial enquanto não há dados suficientes */}
+            {!businessId || !professional || !service || !data ? (
+              <div className="alert alert-warning text-center">
+                Preencha o local, profissional, serviço e data para ver os horários disponíveis.
               </div>
-            )}
+            ) : (
+              <>
+                {slotsLoading && (
+                  <div className="d-flex justify-content-center my-2">
+                    <div className="spinner-border me-2" role="status" aria-hidden="true"></div>
+                    <div>Carregando horários...</div>
+                  </div>
+                )}
 
-            {slotsError && !slotsLoading && (
-              <div className="alert alert-warning">{slotsError}</div>
-            )}
+                {slotsError && !slotsLoading && (
+                  <div className="alert alert-warning">{slotsError}</div>
+                )}
 
-            <label className="form-label d-flex justify-content-center fw-bold mb-4">Horários disponíveis</label>
-            <div className="d-flex flex-wrap gap-2 justify-content-around px-2">
-              {livres.map((hora, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  className={`btn ${formData.hora === hora ? "btn-danger" : "btn-outline-danger"}`}
-                  onClick={() => handleHoraSelect(hora)}
-                >
-                  {hora}
-                </button>
-              ))}
-            </div>
+                <div className="d-flex flex-wrap gap-2 justify-content-around px-2">
+                  {livres.map((hora, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      className={`btn ${formData.hora === hora ? "btn-danger" : "btn-outline-danger"}`}
+                      onClick={() => handleHoraSelect(hora)}
+                    >
+                      {hora}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Caso não existam horários livres */}
+                {livres.length === 0 && !slotsLoading && !slotsError && (
+                  <div className="text-center text-muted">
+                    Nenhum horário disponível para esta data.
+                  </div>
+                )}
+              </>
+            )}
           </div>
 
           <button type="submit" className="btn btn-dark d-flex mx-auto mt-5 px-3" disabled={!formData.hora}>

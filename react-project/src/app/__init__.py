@@ -1,6 +1,6 @@
 from flask import Flask
 from .extensions import mongo, jwt, cors
-from .routes import auth_routes, schedule_routes, business_routes
+from .routes import auth_routes, schedule_routes, business_routes, history_routes
 from .config import DevelopmentConfig
 from dotenv import load_dotenv
 from datetime import timedelta
@@ -22,5 +22,6 @@ def create_app():
     app.register_blueprint(auth_routes.bp)
     app.register_blueprint(schedule_routes.bp)
     app.register_blueprint(business_routes.bp)
+    app.register_blueprint(history_routes.bp)
 
     return app

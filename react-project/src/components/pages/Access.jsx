@@ -3,12 +3,14 @@ import { useNavigate, Link } from "react-router-dom";
 import { login } from "../../services/authService";
 import styles from "./Access.module.css";
 
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+
 function Access() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,17 +26,12 @@ function Access() {
     const response = await login(username, password);
 
     if (response.token) {
-      setSuccess(true);
-      setMessage(response.msg);
+      toast.success(response.msg || "Login realizado com sucesso!");
       setTimeout(() => {
         navigate("/inicio");
-      }, 3000)
-      
+      }, 3000);
     } else {
-      setMessage(response.msg);
-      setTimeout(() => {
-        setMessage(null);
-      }, 3000)
+      toast.error(response.msg || "Erro ao efetuar login. Verifique suas credenciais.");
     }
   };
 
@@ -42,7 +39,6 @@ function Access() {
     <div className={`${styles.gradiente} d-flex justify-content-center align-items-center vh-100`}>
       <div className={`${styles.card} col-4 card p-4 shadow`} >
           <h2 className="text-center mb-4">Acesse já</h2>
-          {message && <div className={success ? "alert alert-success text-center" : "alert alert-danger text-center"}>{message}</div>}
           <form onSubmit={handleSubmit}>
               <div className="mb-3 form-floating">
                 <input
@@ -85,8 +81,20 @@ function Access() {
             <Link to="/registro" className="btn btn-danger w-100">Criar Conta</Link>
           </div>
         </div>
+
+        <ToastContainer
+          position="top-right"
+          autoClose={2400}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          pauseOnHover
+          draggable
+        />
     </div>
+
   );
 }
+  
 
 export default Access;

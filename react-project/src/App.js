@@ -13,7 +13,7 @@ import Schedule from './components/pages/Schedule';
 import Access from './components/pages/Access';
 import News from './components/pages/News';
 import Developers from './components/pages/Developers';
-import UserPage from './components/pages/UserPage';
+import UserPage from './components/pages/userPage/UserPage';
 import Register from './components/pages/Register';
 import RegisterBusiness from './components/pages/registerBusiness/RegisterBusiness'
 
