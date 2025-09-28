@@ -1,6 +1,7 @@
 // import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import {ToastContainer} from "react-toastify";
 
 import NavBar from './components/layout/NavBar/NavBar';
 import Footer from './components/layout/Footer/Footer';
@@ -41,6 +42,7 @@ function App() {
           <Route path="/registro" element={<Register />}></Route>
           <Route path="/configuracao-empresa" element={<RegisterBusiness />}></Route>
         </Routes>
+        <ToastContainer />
       </Container>
       <Footer />
     </Router>

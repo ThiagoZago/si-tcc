@@ -31,8 +31,8 @@ function UserPage() {
       </div>
 
       {/* Tabs */}
-      <div className="mt-4 w-50">
-        <ul className="nav nav-tabs justify-content-center bg-light p-2 rounded shadow">
+      <div className="mt-4 mb-5 w-50">
+        <ul className="nav nav-tabs bg-light p-2 rounded shadow">
           <li className="nav-item">
             <button
               className={`nav-link ${abaAtiva === "perfil" ? styles.activeCss : styles.inactiveCss}`}
@@ -63,17 +63,20 @@ function UserPage() {
               Histórico
             </button>
           </li>
+          <li className="ms-auto">
+            <button className="btn btn-danger" onClick={handleLogout}>
+              Sair
+            </button>
+          </li>
         </ul>
+        
+        
 
         {/* Conteúdo da Aba */}
         <div className="tab-content mt-3 bg-white p-4 rounded shadow">
           {abas[abaAtiva]}
         </div>
       </div>
-
-      <button className="btn btn-danger mt-3 mb-5" onClick={handleLogout}>
-        Sair
-      </button>
     </div>
   );
 }
