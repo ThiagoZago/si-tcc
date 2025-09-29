@@ -6,8 +6,8 @@ import Article from "../layout/Article/Article";
 import styles from './Home.module.css'
 import { Link } from 'react-router-dom';
 
-import atendendo from '../../img/atendendo_um_cliente.png'
-import time_on_hand from '../../img/time_on_hand.png'
+import atendendo from '../../img/barbeiro_trabalhando.jpg'
+import time_on_hand from '../../img/sistema_agendamento.jpg'
 
 
 

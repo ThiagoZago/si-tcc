@@ -1,7 +1,7 @@
 import {Link} from 'react-router-dom';
 import styles from './Footer.module.css'
 
-import logo from '../../../img/barbearia.png';
+import logo from '../../../img/logo_barbearia_favicon_2-removebg-preview.png';
 import facebook from '../../../img/facebook.png';
 import instagram from '../../../img/instagram.png';
 import twitter from '../../../img/twitter-x.png';

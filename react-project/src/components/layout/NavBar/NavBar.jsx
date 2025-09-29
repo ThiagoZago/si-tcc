@@ -1,5 +1,5 @@
 import styles from'./NavBar.module.css';
-import logo from '../../../img/barbearia.png';
+import logo from '../../../img/logo_barbearia_favicon_2-removebg-preview.png';
 import { Link } from 'react-router-dom';
 
 function NavBar() {
