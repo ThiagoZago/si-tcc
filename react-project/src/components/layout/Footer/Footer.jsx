@@ -2,9 +2,9 @@ import {Link} from 'react-router-dom';
 import styles from './Footer.module.css'
 
 import logo from '../../../img/logo_barbearia_favicon_2-removebg-preview.png';
-import facebook from '../../../img/facebook.png';
+import youtube from '../../../img/youtube.png';
 import instagram from '../../../img/instagram.png';
-import twitter from '../../../img/twitter-x.png';
+import telegram from '../../../img/telegram.png';
 
 function Footer(){
     return(
@@ -12,7 +12,9 @@ function Footer(){
             <div className="container">
                 <div className="row">
                     <div className="col-md-2">
-                        <img className={styles.logoFooter} src={logo} alt="BarbApp" width="36" />
+                        <Link to="/">
+                            <img className={styles.logoFooter} src={logo} alt="BarbApp" width="40" />
+                        </Link>
                     </div>
                     <div className="col-md-2">
                     <h4>NOSSA EMPRESA</h4>
@@ -38,8 +40,8 @@ function Footer(){
                     <div className="col-md-4">
                         <ul>
                             <li><a href="https://www.instagram.com"><img className={styles.midiaFooter} src={instagram} alt="Instagram" width="40"  /></a></li>
-                            <li><a href="https://www.facebook.com/?locale=pt_BR"><img className={styles.midiaFooter} src={twitter} alt="Twitter X" width="40"  /></a></li>
-                            <li><a href="https://x.com/?lang=pt"><img className={styles.midiaFooter} src={facebook} alt="Facebook" width="40"  /></a></li>
+                            <li><a href="https://web.telegram.org"><img className={styles.midiaFooter} src={telegram} alt="Telegram X" width="40"  /></a></li>
+                            <li><a href="https://youtube.com.br"><img className={styles.midiaFooter} src={youtube} alt="Youtube" width="40"  /></a></li>
                         </ul>
                     </div>
                 </div>

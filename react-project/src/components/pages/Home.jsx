@@ -7,7 +7,7 @@ import styles from './Home.module.css'
 import { Link } from 'react-router-dom';
 
 import atendendo from '../../img/barbeiro_trabalhando.jpg'
-import time_on_hand from '../../img/sistema_agendamento.jpg'
+import time_on_hand from '../../img/sistema_agendamento_edited.jpg'
 
 
 
@@ -44,7 +44,7 @@ function Home(){
 
                         toBtn="/acesso"
                         textBtn="TESTE 1"
-                        textColorBtn="000"
+                        textColorBtn="#000"
                         borderBtn="#2c2c2c"
                         bgBtn="none"
 
@@ -62,7 +62,7 @@ function Home(){
 
                         toBtn="/acesso"
                         textBtn="TESTE 2"
-                        textColorBtn="000"
+                        textColorBtn="#000"
                         borderBtn="#2c2c2c"
                         bgBtn="none"
 
@@ -80,7 +80,7 @@ function Home(){
 
                         toBtn="/acesso"
                         textBtn="TESTE 2"
-                        textColorBtn="000"
+                        textColorBtn="#000"
                         borderBtn="#2c2c2c"
                         bgBtn="none"
 
