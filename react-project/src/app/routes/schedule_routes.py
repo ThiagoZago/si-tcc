@@ -39,7 +39,10 @@ def gerar_slots_disponiveis(availability: dict, servico_duracao: str, data_str: 
 
     # duração em minutos
     try:
-        duracao = int(str(servico_duracao).replace("min", "").strip())
+        import re
+        match = re.search(r'\d+', str(servico_duracao))
+        duracao = int(match.group()) if match else 0
+
     except Exception:
         return []
 
@@ -353,12 +356,15 @@ def dias_disponiveis(id):
         hoje = datetime.today()
 
         for i in range(dias_qtd):
+            
             dia_atual = hoje + timedelta(days=i)
             dia_str = dia_atual.strftime("%Y-%m-%d")
             dia_key = dia_semana_pt(dia_str)
 
             availability = prof.get("availability", {}).get(dia_key, {"active": False})
             disponivel = availability.get("active", False)
+
+            
 
             if disponivel:
                 # gera slots possíveis
@@ -377,6 +383,7 @@ def dias_disponiveis(id):
                 disponivel = len(livres) > 0
 
             resultados.append({"date": dia_str, "available": disponivel})
+            
 
         return res_json(resultados, 200)
 

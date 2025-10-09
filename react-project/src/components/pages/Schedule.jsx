@@ -226,9 +226,11 @@ function Schedule() {
     return dia ? dia.available : false;
   };
 
+  
   const selectedDate = formData.data
     ? parse(formData.data, "yyyy-MM-dd", new Date())
     : null;
+  
 
   return (
     <div className="container-fluid w-75">
