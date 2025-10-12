@@ -24,29 +24,10 @@ function CadastroEstabelecimento() {
   const prevStep = () => step > 1 && setStep(step - 1);
   const goToStep = (targetStep) => targetStep < step && setStep(targetStep);
 
-  const handleSaveOrUpdate = async () => {
-    const config = {
-      business,
-      professionals: professionals || [],
-      services: services || []
-    };
 
-    try {
-      const token = localStorage.getItem('token');
-      const response = existingBusiness
-      ? await axios.put('http://127.0.0.1:5000/business', config, { headers: { Authorization: `Bearer ${token}` } })
-      : await axios.post('http://127.0.0.1:5000/business', config, { headers: { Authorization: `Bearer ${token}` } });
-
-      console.log("Sucesso:", response.data);
-      alert(existingBusiness ? 'Estabelecimento atualizado!' : 'Estabelecimento criado!');
-      setExistingBusiness(true); // garante que futuras edições usarão PUT
-      navigate("/inicio");
-    } catch (error) {
-        console.error("Erro ao salvar/atualizar:", error.response?.data || error.message);
-        alert(`Erro: ${error.response?.data?.error || error.message}`);
-      }
-  };
-
+  // PRIMEIRA FUNÇÃO CHAMADA, ACONTECE AO MONTAR O COMPONENTE
+  // 
+  //  Acontece junto com a recuperação dos dados - GET
   const fetchBusiness = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -72,6 +53,37 @@ function CadastroEstabelecimento() {
     }
   };
 
+
+  // FUNÇÃO QUE É DISPARADA A PARTIR DA CONFIRMAÇÃO AO FINAL DO PROCESSO DE PREENCHIMENTO/ATUALIZAÇÃO
+  // 
+  //  Reconhece se já existe algum business, a partir disso chama a rota PUT ou POST
+  // 
+  const handleSaveOrUpdate = async () => {
+    const config = {
+      business,
+      professionals: professionals || [],
+      services: services || []
+    };
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = existingBusiness
+      ? await axios.put('http://127.0.0.1:5000/business', config, { headers: { Authorization: `Bearer ${token}` } })
+      : await axios.post('http://127.0.0.1:5000/business', config, { headers: { Authorization: `Bearer ${token}` } });
+
+      console.log("Sucesso:", response.data);
+      alert(existingBusiness ? 'Estabelecimento atualizado!' : 'Estabelecimento criado!');
+      setExistingBusiness(true); // garante que futuras edições usarão PUT
+      navigate("/inicio");
+    } catch (error) {
+        console.error("Erro ao salvar/atualizar:", error.response?.data || error.message);
+        alert(`Erro: ${error.response?.data?.error || error.message}`);
+      }
+  };
+
+  // FUNÇÃO QUE DISPARA ASSIM QUE O USUÁRIO CLICA NO BOTÃO "DELETAR"
+  //
+  // Acontece com a confirmação do usuário e parte para o DELETE
   const handleDelete = async () => {
     if (!window.confirm("Tem certeza que deseja excluir seu estabelecimento?")) return;
 
@@ -90,9 +102,11 @@ function CadastroEstabelecimento() {
     }
   };
 
+
+  // Função ativa toda vez que entramos na página
   useEffect(() => {
     fetchBusiness();
-  }, []); // [] garante que roda apenas uma vez, ao montar
+  }, []); // [] garante que roda apenas uma vez, ao montar o componente.
 
 
 

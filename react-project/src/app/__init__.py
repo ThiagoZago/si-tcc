@@ -4,6 +4,8 @@ from .routes import auth_routes, schedule_routes, business_routes, history_route
 from .config import DevelopmentConfig
 from dotenv import load_dotenv
 from datetime import timedelta
+
+
 import os
 
 def create_app():
