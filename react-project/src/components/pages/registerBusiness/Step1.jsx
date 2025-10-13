@@ -76,4 +76,3 @@ function Step1DadosBasicos({ business, setBusiness, nextStep, deleteBusiness }) 
 }
 
 export default Step1DadosBasicos;
-
