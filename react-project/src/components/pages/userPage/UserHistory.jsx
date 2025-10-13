@@ -278,7 +278,10 @@ function UserHistory() {
                       <strong>Cliente:</strong> {agendamento.nome}
                     </p>
                     <p className="card-text mb-1">
-                      <strong>Profissional:</strong> {agendamento.professional}
+                      <strong>Serviço:</strong> {agendamento.serviceNome}
+                    </p>
+                    <p className="card-text mb-1">
+                      <strong>Profissional:</strong> {agendamento.professionalNome}
                     </p>
                     <p className="card-text">
                       <strong>Telefone:</strong>{" "}

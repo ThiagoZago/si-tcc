@@ -16,8 +16,8 @@ function Schedule() {
     businessId: "",
     businessName: "",
     businessAddress: "",
-    professional: "",
-    service: "",
+    professionalId: "",
+    serviceId: "",
     data: "",
     hora: "",
   });
@@ -32,13 +32,14 @@ function Schedule() {
   const [slotsError, setSlotsError] = useState("");
 
 
+
   // Quando trocar de business, resetar dependentes e carregar profissionais+serviços
   useEffect(() => {
     const businessId = formData.businessId;
     setFormData(prev => ({
       ...prev,
-      professional: "",
-      service: "",
+      professionalId: "",
+      serviceId: "",
       data: "",
       hora: "",
     }));
@@ -68,11 +69,17 @@ function Schedule() {
     fetchAll();
   }, [formData.businessId]);
 
-  const { businessId, professional, service, data } = formData;
+  const { businessId, professionalId, serviceId, data } = formData;
 
   useEffect(() => {
     
-    if (!businessId || !professional || !service) {
+    console.log("business:", businessId)
+    console.log("professional:", professionalId)
+    console.log("service:", serviceId)
+    console.log("=====================")
+    console.log("Services array:", services)
+    console.log("Professionals array:", professionals)
+    if (!businessId || !professionalId || !serviceId) {
       setAvailableDays([]);
       return;
     }
@@ -82,7 +89,7 @@ function Schedule() {
       try {
         const resp = await axios.get(
           `http://127.0.0.1:5000/businessSchedule/${businessId}/days`,
-          { params: { professional, service } }
+          { params: { professionalId, serviceId } }
         );
         if (!cancelled) setAvailableDays(resp.data || []);
       } catch (err) {
@@ -93,11 +100,11 @@ function Schedule() {
 
     fetchDays();
     return () => { cancelled = true; };
-  }, [businessId, professional, service]);
+  }, [businessId, professionalId, serviceId, services, professionals]);
 
   // Buscar horários livres
   useEffect(() => {
-    if (!businessId || !professional || !service || !data) {
+    if (!businessId || !professionalId || !serviceId || !data) {
       setLivres([]);
       setSlotsError("");
       setSlotsLoading(false);
@@ -113,7 +120,7 @@ function Schedule() {
       try {
         const resp = await axios.get(
           `http://127.0.0.1:5000/businessSchedule/${businessId}/slots`,
-          { params: { professional, service, date: data }, timeout: 8000 }
+          { params: { professionalId, serviceId, date: data }, timeout: 8000 }
         );
         if (!cancelled) {
           setLivres(Array.isArray(resp.data) ? resp.data : []);
@@ -138,19 +145,14 @@ function Schedule() {
     return () => {
       cancelled = true;
     };
-  }, [businessId, professional, service, data]);
+  }, [businessId, professionalId, serviceId, data]);
 
   // alterações no form
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => {
-      let next = { ...prev, [name]: value };
-      if (name === "professional" || name === "service" || name === "data") {
-        next.hora = "";
-        setLivres([]);
-      }
-      return next;
-    });
+    setFormData((prev) => ({
+      ...prev, [name]: value, 
+    }));
   };
 
   const handleHoraSelect = (hora) => {
@@ -171,8 +173,8 @@ function Schedule() {
         businessId: "",
         businessName: "",
         businessAddress: "",
-        professional: "",
-        service: "",
+        professionalId: "",
+        serviceId: "",
         data: "",
         hora: "",
       });
@@ -311,15 +313,15 @@ function Schedule() {
             <select
               className="form-select"
               id="professional"
-              name="professional"
-              value={formData.professional}
+              name="professionalId"
+              value={formData.professionalId}
               onChange={handleChange}
               required
               disabled={!professionals.length}
             >
               <option value="">Selecione um profissional</option>
-              {professionals.map((p, i) => (
-                <option key={i} value={p.name}>{p.name} - {p.role}</option>
+              {professionals.map((p) => (
+                <option key={p._id.$oid} value={p._id.$oid}>{p.name} - {p.role}</option>
               ))}
             </select>
           </div>
@@ -329,15 +331,15 @@ function Schedule() {
             <select
               className="form-select"
               id="service"
-              name="service"
-              value={formData.service}
+              name="serviceId"
+              value={formData.serviceId}
               onChange={handleChange}
               required
               disabled={!services.length}
             >
               <option value="">Selecione um serviço</option>
-              {services.map((s, i) => (
-                <option key={i} value={s.name}>{s.name} ({s.duration})</option>
+              {services.map((s) => (
+                <option key={s._id.$oid} value={s._id.$oid}>{s.name} ({s.duration})</option>
               ))}
             </select>
           </div>
@@ -364,7 +366,7 @@ function Schedule() {
             </label>
 
             {/* Mensagem inicial enquanto não há dados suficientes */}
-            {!businessId || !professional || !service || !data ? (
+            {!businessId || !professionalId || !serviceId || !data ? (
               <div className="alert alert-warning text-center">
                 Preencha o local, profissional, serviço e data para ver os horários disponíveis.
               </div>
