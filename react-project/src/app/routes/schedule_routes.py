@@ -212,18 +212,6 @@ def search_business():
     return jsonify(negocios), 200
 
 
-
-@bp.route("/businessSchedule", methods=["GET"])
-def listar_business():
-    businesses = list(mongo.db.business.find({}, {"_id": 1, "business.name": 1}))
-    result = []
-    for b in businesses:
-        result.append({
-            "_id": str(b["_id"]),
-            "name": b["business"]["name"]  # pega de dentro do objeto "business"
-        })
-    return jsonify(result), 200
-
 @bp.route("/businessSchedule/<id>/professionals", methods=["GET"])
 def listar_profissionais(id):
     business = mongo.db.business.find_one({"_id": ObjectId(id)}, {"professionals": 1})
@@ -239,18 +227,6 @@ def listar_servicos(id):
         return jsonify({"msg": "Estabelecimento não encontrado"}), 404
 
     return jsonify(business["services"]), 200
-
-@bp.route("/businessSchedule/<id>/availability/<professional>", methods=["GET"])
-def horarios_disponiveis(id, professional):
-    business = mongo.db.business.find_one(
-        {"_id": ObjectId(id), "professionals.name": professional},
-        {"professionals.$": 1}
-    )
-    if not business:
-        return jsonify({"msg": "Profissional não encontrado"}), 404
-
-    professional_data = business["professionals"][0]
-    return jsonify(professional_data["availability"]), 200
 
 # Slots livres (teóricos) para um dia, considerando agenda atual
 # Ex.: GET /businessSchedule/<id>/slots?professional=JONATHAN&service=CORTE%20COMPLETO&date=2025-09-10
@@ -294,7 +270,7 @@ def slots_por_dia(id):
 @bp.route("/businessSchedule/<id>/days", methods=["GET"])
 def dias_disponiveis(id):
     professional_id = to_object_id(request.args.get("professionalId"))
-    service_id = to_object_id(request.args.get("serviceId"))  # <-- corrigido, antes estava "service"
+    service_id = to_object_id(request.args.get("serviceId"))  
     dias_qtd = int(request.args.get("days", 30))
 
     if not all([id, professional_id, service_id]):
