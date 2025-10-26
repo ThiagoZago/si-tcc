@@ -1,4 +1,4 @@
-import Carousel from "../../Carousel";
+import Carousel from "../../carousel/Carousel";
 import RightContent from "../../layout/RightContent/RightContent";
 import LeftContent from "../../layout/LeftContent/LeftContent";
 import Article from "../../layout/Article/Article";
@@ -6,8 +6,8 @@ import Article from "../../layout/Article/Article";
 import styles from './Home.module.css'
 import { Link } from 'react-router-dom';
 
-import atendendo from '../../img/barbeiro_trabalhando.jpg'
-import time_on_hand from '../../img/sistema_agendamento_edited.jpg'
+import atendendo from '../../../img/barbeiro_trabalhando.jpg'
+import time_on_hand from '../../../img/sistema_agendamento_edited.jpg'
 
 
 
@@ -110,4 +110,4 @@ function Home(){
     );
 }
 
-export default Home;
+export default Home

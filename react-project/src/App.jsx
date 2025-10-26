@@ -6,15 +6,15 @@ import NavBar from './components/layout/NavBar/NavBar';
 import Footer from './components/layout/Footer/Footer';
 import Container from './components/layout/Container/Container'
 
-import Home from './components/pages/Home';
+import Home from './components/pages/home/Home';
 import About from './components/pages/About';
-import Help from './components/pages/Help';
+import Help from './components/pages/help/Help';
 import Schedule from './components/pages/Schedule';
-import Access from './components/pages/Access';
+import Access from './components/pages/access/Access';
 import News from './components/pages/News';
 import Developers from './components/pages/Developers';
 import UserPage from './components/pages/userPage/UserPage';
-import Register from './components/pages/Register';
+import Register from './components/pages/register/Register';
 import RegisterBusiness from './components/pages/registerBusiness/RegisterBusiness'
 
 import ScrollToTop from './components/ScrollToTop';
