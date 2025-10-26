@@ -1,3 +1,84 @@
-.caixa{
+.section {
   min-height: 85vh;
+  background-color: #ffffff;
+  transition: background 0.3s ease;
+}
+
+.title {
+  font-size: 2rem;
+  color: #1e1e1e;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #6c757d;
+}
+
+/* Card individual */
+.item {
+  background-color: #f9fafb;
+  transition: all 0.3s ease;
+}
+
+.item:hover {
+  background-color: #f1f3f5;
+  transform: translateY(-1px);
+}
+
+/* Botão principal (header) */
+.button {
+  background-color: transparent;
+  font-weight: 500;
+  font-size: 1rem;
+  color: #212529;
+  padding: 0.9rem 1.25rem;
+  transition: all 0.3s ease;
+  gap: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.button:not(.collapsed) {
+  color: #0d6efd;
+  background-color: #f8f9fa;
+}
+
+.button:hover {
+  background-color: #f1f3f5;
+}
+
+.button:focus {
+  box-shadow: none;
+}
+
+/* Ícone do dropdown */
+.icon {
+  transition: transform 0.3s ease;
+  margin-right: 0.5rem;
+  color: #6c757d;
+}
+
+/* Corpo da resposta */
+.body {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  padding: 1rem 1.25rem;
+  background-color: #5f0b0bcc;
+  animation: fadeIn 0.4s ease;
+}
+
+/* Animação de entrada suave */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Transição do colapso */
+.collapse {
+  transition: height 0.4s ease, opacity 0.4s ease;
 }
