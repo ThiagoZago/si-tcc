@@ -36,7 +36,6 @@ function CadastroEstabelecimento() {
         'http://127.0.0.1:5000/business',
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      console.log("Jsonfy: ", response.data)
 
       // Ajusta os estados
       setBusiness(response.data.business || {});
@@ -53,6 +52,42 @@ function CadastroEstabelecimento() {
     }
   };
 
+
+  const handleAddService = (service, indexToEdit = null) => {
+    // normaliza nome para comparação
+    const nameNorm = (service.name || "").trim().toLowerCase();
+
+    // procura duplicata (ignora o próprio índice se estamos editando)
+    const existingIndex = services.findIndex((s, i) => {
+      const sName = (s.name || "").trim().toLowerCase();
+      return sName === nameNorm && i !== indexToEdit;
+    });
+
+    if (existingIndex !== -1) {
+      const confirmar = window.confirm(
+        "Esse serviço já existe. Tem certeza que gostaria de criar/editar com este nome?"
+      );
+      if (!confirmar) {
+        // pai cancela -> informa child para não limpar o formulário
+        return false;
+      }
+    }
+
+    if (indexToEdit !== null && indexToEdit >= 0 && indexToEdit < services.length) {
+      const updated = [...services];
+      updated[indexToEdit] = service;
+      setServices(updated);
+      return true;
+    }
+
+    // adicionar novo
+    setServices(prev => [...prev, service]);
+    return true;
+  };
+
+  const handleDeleteService = (index) => {
+    setServices(prev => prev.filter((_, i) => i !== index));
+  };
 
   // FUNÇÃO QUE É DISPARADA A PARTIR DA CONFIRMAÇÃO AO FINAL DO PROCESSO DE PREENCHIMENTO/ATUALIZAÇÃO
   // 
@@ -145,7 +180,7 @@ function CadastroEstabelecimento() {
 
       {step === 1 && <Step1DadosBasicos business={business} setBusiness={setBusiness} nextStep={nextStep} deleteBusiness={handleDelete} />}
       {step === 2 && <Step2Profissionais professionals={professionals} setProfessionals={setProfessionals} prevStep={prevStep} nextStep={nextStep} />}
-      {step === 3 && <Step3Servicos professionals={professionals} services={services} setServices={setServices} prevStep={prevStep} nextStep={nextStep} />}
+      {step === 3 && <Step3Servicos professionals={professionals} services={services} prevStep={prevStep} nextStep={nextStep} onAddService={handleAddService} onDeleteService={handleDeleteService} />}
       {step === 4 && <Step4Revisao business={business} professionals={professionals} services={services} prevStep={prevStep} onSave={handleSaveOrUpdate} />}
     </div>
   );

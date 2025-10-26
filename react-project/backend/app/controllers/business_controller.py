@@ -19,7 +19,7 @@ def cadastrar_estabelecimento(request):
         if existing:
             return jsonify({'error': 'Estabelecimento já cadastrado. Use PUT para atualizar.'}), 400
 
-        if not data.get('business') or not data.get('professionals'):
+        if not data.get('business') or not data.get('professionals') or not data.get('services'):
             return jsonify({'error': 'Dados incompletos'}), 400
 
         created_id = criar_estabelecimento(data)
@@ -55,8 +55,17 @@ def recuperar_estabelecimento():
         if not business:
             return jsonify({'message': 'Nenhum estabelecimento cadastrado'}), 404
 
+        # Converte ObjectId para string
         business['_id'] = str(business['_id'])
-        return jsonify(business), 200
+
+        # ✅ Alinha com o que o React espera (business, professionals, services)
+        response = {
+            "business": business.get("business", {}),
+            "professionals": business.get("professionals", []),
+            "services": business.get("services", [])
+        }
+
+        return jsonify(response), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
