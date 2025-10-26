@@ -1,7 +1,7 @@
-import Carousel from "../Carousel";
-import RightContent from "../layout/RightContent/RightContent";
-import LeftContent from "../layout/LeftContent/LeftContent";
-import Article from "../layout/Article/Article";
+import Carousel from "../../Carousel";
+import RightContent from "../../layout/RightContent/RightContent";
+import LeftContent from "../../layout/LeftContent/LeftContent";
+import Article from "../../layout/Article/Article";
 
 import styles from './Home.module.css'
 import { Link } from 'react-router-dom';

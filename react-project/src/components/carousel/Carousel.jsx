@@ -1,7 +1,7 @@
 import styles from './Carousel.module.css'
 import { Link } from 'react-router-dom';
 
-import BtnComponent from './BtnComponent';
+import BtnComponent from '../BtnComponent';
 import { useState } from 'react';
 
 
@@ -78,5 +78,4 @@ function Carousel() {
   );
 }
 
-export default Carousel;
-
+export default Carousel

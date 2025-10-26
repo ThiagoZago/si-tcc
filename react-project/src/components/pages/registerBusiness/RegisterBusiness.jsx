@@ -187,4 +187,4 @@ function CadastroEstabelecimento() {
   
 }
 
-export default CadastroEstabelecimento;
+export default CadastroEstabelecimento

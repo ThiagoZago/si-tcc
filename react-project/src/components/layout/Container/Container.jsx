@@ -1,4 +1,3 @@
-
 function Container(props){
     return(
         <div>
@@ -7,4 +6,4 @@ function Container(props){
     )
 }
 
-export default Container;
+export default Container
