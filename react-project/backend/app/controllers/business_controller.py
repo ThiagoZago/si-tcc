@@ -1,5 +1,6 @@
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity, jwt_required
+from app.extensions import mongo
 from app.models.business_model import (
     criar_estabelecimento,
     atualizar_estabelecimento_db,
@@ -19,7 +20,7 @@ def cadastrar_estabelecimento(request):
         if existing:
             return jsonify({'error': 'Estabelecimento já cadastrado. Use PUT para atualizar.'}), 400
 
-        if not data.get('business') or not data.get('professionals') or not data.get('services'):
+        if not data.get('business'):
             return jsonify({'error': 'Dados incompletos'}), 400
 
         created_id = criar_estabelecimento(data)
@@ -55,14 +56,23 @@ def recuperar_estabelecimento():
         if not business:
             return jsonify({'message': 'Nenhum estabelecimento cadastrado'}), 404
 
-        # Converte ObjectId para string
+        business_id = business["_id"]
         business['_id'] = str(business['_id'])
 
-        # ✅ Alinha com o que o React espera (business, professionals, services)
+        professionals = list(mongo.db.professionals.find({"businessId": business_id}))
+        services = list(mongo.db.services.find({"businessId": business_id}))
+
+        for p in professionals:
+            p["_id"] = str(p["_id"])
+        for s in services:
+            s["_id"] = str(s["_id"])
+            for prof in s.get("professionals", []):
+                prof["id"] = str(prof["id"])
+
         response = {
             "business": business.get("business", {}),
-            "professionals": business.get("professionals", []),
-            "services": business.get("services", [])
+            "professionals": professionals,
+            "services": services
         }
 
         return jsonify(response), 200
