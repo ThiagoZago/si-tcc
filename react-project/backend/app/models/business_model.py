@@ -33,11 +33,21 @@ def atualizar_estabelecimento_db(usuario_id, data):
     if not existing:
         return None
 
+    business_id = data.get("_id")
     business_data = data.get("business", {})
+    professionals_data = data.get("professionals", {})
+    services_data = data.get("services", {})
+
     if not business_data:
         raise ValueError("Campo 'business' é obrigatório")
+    
+    if not professionals_data:
+        raise ValueError("Campo 'professionals' é obrigatório")
+    
+    if not services_data:
+        raise ValueError("Campo 'services' é obrigatório")
 
-    updated_fields = {
+    updated_fields_business = {
         "business.name": business_data.get("name"),
         "business.type": business_data.get("type"),
         "business.phone": business_data.get("phone"),
@@ -46,10 +56,39 @@ def atualizar_estabelecimento_db(usuario_id, data):
         "business.address": business_data.get("address", {})
     }
 
+    updated_fields_professionals = {
+        "professionals": professionals_data
+    }
+
+    # updated_fields_services = {
+    #     "services": services_data
+    # }
+
     mongo.db.business.update_one(
         {"_id": existing["_id"]},
-        {"$set": updated_fields}
+        {"$set": updated_fields_business}
     )
+
+    for prof in updated_fields_professionals["professionals"]:
+        mongo.db.professionals.update_one(
+            {"_id": ObjectId(prof["_id"])},
+            {"$set": {
+                "name": prof["name"],
+                "role": prof["role"],
+                "availability": prof["availability"],
+                "exceptions": prof["exceptions"]
+            }}
+        )
+
+    # for serv in updated_fields_services["services"]:
+    #     mongo.db.services.update_one(
+    #         {"_id": ObjectId(serv["_id"])},
+    #         {"$set": {
+    #             "name": serv["name"],
+    #             "duration": serv["duration"],
+    #             "professionals": serv["professionals"]
+    #         }}
+    #     )
 
     return str(existing["_id"])
 

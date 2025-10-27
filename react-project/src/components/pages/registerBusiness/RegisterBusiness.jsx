@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
+import axiosInstance from '../../../utils/axiosInterceptor';
 
 import Step1DadosBasicos from './Step1';
 import Step2Profissionais from './Step2';
@@ -32,8 +32,8 @@ function CadastroEstabelecimento() {
     try {
       const token = localStorage.getItem('token');
       if (!token) return;
-      const response = await axios.get(
-        'http://127.0.0.1:5000/business',
+      const response = await axiosInstance.get(
+        '/business',
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -103,8 +103,8 @@ function CadastroEstabelecimento() {
     try {
       const token = localStorage.getItem('token');
       const response = existingBusiness
-      ? await axios.put('http://127.0.0.1:5000/business', config, { headers: { Authorization: `Bearer ${token}` } })
-      : await axios.post('http://127.0.0.1:5000/business', config, { headers: { Authorization: `Bearer ${token}` } });
+      ? await axiosInstance.put('/business', config, { headers: { Authorization: `Bearer ${token}` } })
+      : await axiosInstance.post('/business', config, { headers: { Authorization: `Bearer ${token}` } });
 
       console.log("Sucesso:", response.data);
       alert(existingBusiness ? 'Estabelecimento atualizado!' : 'Estabelecimento criado!');
@@ -124,8 +124,8 @@ function CadastroEstabelecimento() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.delete(
-        'http://127.0.0.1:5000/business',
+      const response = await axiosInstance.delete(
+        '/business',
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log("Excluído:", response.data);
