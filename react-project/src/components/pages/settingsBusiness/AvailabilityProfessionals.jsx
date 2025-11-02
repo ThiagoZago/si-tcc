@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function Step5Availability({ availability = {}, setAvailability, exceptions = [], setExceptions }) {
+function AvailabilityProfessionals({ availability = {}, setAvailability, exceptions = [], setExceptions }) {
   // Chaves dos dias (para armazenar) + rótulos (para exibir)
   const days = [
     { key: "segunda", label: "Segunda-feira" },
@@ -166,4 +166,4 @@ function Step5Availability({ availability = {}, setAvailability, exceptions = []
   );
 }
 
-export default Step5Availability;
+export default AvailabilityProfessionals

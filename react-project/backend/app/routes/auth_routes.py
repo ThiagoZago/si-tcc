@@ -12,7 +12,7 @@ def register():
 def login():
     return auth_controller.login(request)
 
-@bp.route("/inicio", methods=["GET"])
-@jwt_required()
-def dashboard():
-    return auth_controller.dashboard()
+# @bp.route("/inicio", methods=["GET"])
+# @jwt_required()
+# def dashboard():
+#     return auth_controller.dashboard()

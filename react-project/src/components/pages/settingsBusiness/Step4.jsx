@@ -1,6 +1,4 @@
-
 function Step4Revisao({ business, professionals, services, prevStep, onSave }) {
-
 
   return (
     <div>
@@ -29,10 +27,7 @@ function Step4Revisao({ business, professionals, services, prevStep, onSave }) {
         <button className="btn btn-success" onClick={onSave}>Salvar</button>
       </div>
     </div>
-    
   );
-
-  
 }
 
-export default Step4Revisao;
+export default Step4Revisao

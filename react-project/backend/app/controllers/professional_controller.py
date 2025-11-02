@@ -28,8 +28,15 @@ def cadastrar_profissional(request):
 @jwt_required()
 def atualizar_profissional_controller(request, id):
     try:
+        user_id = get_jwt_identity()
+        business = buscar_estabelecimento(user_id)
+
+        if not business:
+            return jsonify({"error": "Estabelecimento não encontrado"}), 404
+        
         data = request.get_json()
         updated = atualizar_profissional(id, data)
+        
         if not updated:
             return jsonify({"message": "Profissional não encontrado"}), 404
 
@@ -68,9 +75,15 @@ def buscar_profissional_controller(id):
 @jwt_required()
 def remover_profissional_controller(id):
     try:
-        deleted = remover_profissional(id)
+        user_id = get_jwt_identity()
+        business = buscar_estabelecimento(user_id)
+        if not business:
+            return jsonify({"error": "Estabelecimento não encontrado"}), 404
+
+        deleted = remover_profissional(id, business["_id"])  # 👈 passa o business_id aqui
         if deleted:
             return jsonify({"message": "Profissional removido com sucesso"}), 200
         return jsonify({"message": "Profissional não encontrado"}), 404
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500

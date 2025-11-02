@@ -38,5 +38,5 @@ def login(request):
     access_token = create_access_token(identity=data["username"], expires_delta=timedelta(days=7))
     return jsonify({"token": access_token, "msg":"Login realizado com sucesso! Redirecionando."}), 200
 
-def dashboard():
-    return jsonify({"msg": "Acesso permitido ao dashboard"}), 200
+# def dashboard():
+#     return jsonify({"msg": "Acesso permitido ao dashboard"}), 200

@@ -101,8 +101,8 @@ function Access() {
         position="top-right"
         autoClose={2400}
         hideProgressBar={false}
-        newestOnTop
-        closeOnClick
+        newestOnTop={false}
+        closeOnClick={false}
         pauseOnHover
         draggable
       />

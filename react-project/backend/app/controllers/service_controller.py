@@ -2,8 +2,8 @@ from flask import jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from bson import ObjectId
 from app.models.service_model import (
-    criar_servico, atualizar_servico, listar_servicos,
-    buscar_servico, remover_servico
+    criar_servico, atualizar_servico,
+    listar_servicos, buscar_servico, remover_servico
 )
 from app.models.business_model import buscar_estabelecimento
 from app.extensions import mongo
@@ -20,7 +20,7 @@ def cadastrar_servico(request):
         data = request.get_json()
         data["businessId"] = business["_id"]
 
-        # ✅ Validação dos profissionais vinculados
+        # ✅ Valida profissionais vinculados
         professionals_input = data.get("professionals", [])
         valid_professionals = []
 
@@ -29,20 +29,20 @@ def cadastrar_servico(request):
             if not prof_id or not ObjectId.is_valid(prof_id):
                 return jsonify({"error": f"ID de profissional inválido: {prof_id}"}), 400
 
-            # verifica se o profissional pertence ao mesmo business
             found = mongo.db.professionals.find_one({
                 "_id": ObjectId(prof_id),
-                "businessId": str(business["_id"])
+                "businessId": business["_id"]
             })
             if not found:
-                return jsonify({"error": f"O profissional {prof.get('name', '')} não pertence a este estabelecimento"}), 400
+                return jsonify({
+                    "error": f"O profissional {prof.get('name', '')} não pertence a este estabelecimento"
+                }), 400
 
             valid_professionals.append({
                 "id": str(found["_id"]),
                 "name": found["name"]
             })
 
-        # substitui a lista validada
         data["professionals"] = valid_professionals
 
         service_id = criar_servico(data)
@@ -61,8 +61,8 @@ def atualizar_servico_controller(request, id):
             return jsonify({"error": "Estabelecimento não encontrado"}), 404
 
         data = request.get_json()
+        data["businessId"] = business["_id"]
 
-        # ✅ Revalida profissionais (mesma lógica do POST)
         professionals_input = data.get("professionals", [])
         valid_professionals = []
 
@@ -73,10 +73,12 @@ def atualizar_servico_controller(request, id):
 
             found = mongo.db.professionals.find_one({
                 "_id": ObjectId(prof_id),
-                "businessId": str(business["_id"])
+                "businessId": business["_id"]
             })
             if not found:
-                return jsonify({"error": f"O profissional {prof.get('name', '')} não pertence a este estabelecimento"}), 400
+                return jsonify({
+                    "error": f"O profissional {prof.get('name', '')} não pertence a este estabelecimento"
+                }), 400
 
             valid_professionals.append({
                 "id": str(found["_id"]),
@@ -124,7 +126,12 @@ def buscar_servico_controller(id):
 @jwt_required()
 def remover_servico_controller(id):
     try:
-        deleted = remover_servico(id)
+        user_id = get_jwt_identity()
+        business = buscar_estabelecimento(user_id)
+        if not business:
+            return jsonify({"error": "Estabelecimento não encontrado"}), 404
+
+        deleted = remover_servico(id, business["_id"])
         if deleted:
             return jsonify({"message": "Serviço removido com sucesso"}), 200
         return jsonify({"message": "Serviço não encontrado"}), 404

@@ -21,10 +21,10 @@ def cadastrar_estabelecimento(request):
             return jsonify({'error': 'Estabelecimento já cadastrado. Use PUT para atualizar.'}), 400
 
         if not data.get('business'):
-            return jsonify({'error': 'Dados incompletos'}), 400
+            return jsonify({'error': 'Dados incompletos!'}), 400
 
         created_id = criar_estabelecimento(data)
-        return jsonify({'message': 'Estabelecimento criado', 'id': created_id}), 201
+        return jsonify({'message': 'Estabelecimento criado!', 'id': created_id}), 201
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -39,9 +39,9 @@ def atualizar_estabelecimento(request):
 
         updated_id = atualizar_estabelecimento_db(user_id, data)
         if not updated_id:
-            return jsonify({'error': 'Nenhum estabelecimento encontrado para atualizar'}), 404
+            return jsonify({'error': 'Nenhum estabelecimento encontrado para atualizar.'}), 404
 
-        return jsonify({'message': 'Estabelecimento atualizado', 'id': updated_id}), 200
+        return jsonify({'message': 'Estabelecimento atualizado!', 'id': updated_id}), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -54,25 +54,12 @@ def recuperar_estabelecimento():
         business = buscar_estabelecimento(user_id)
 
         if not business:
-            return jsonify({'message': 'Nenhum estabelecimento cadastrado'}), 404
+            return jsonify({'message': 'Nenhum estabelecimento cadastrado.'}), 404
 
-        business_id = business["_id"]
         business['_id'] = str(business['_id'])
-
-        professionals = list(mongo.db.professionals.find({"businessId": business_id}))
-        services = list(mongo.db.services.find({"businessId": business_id}))
-
-        for p in professionals:
-            p["_id"] = str(p["_id"])
-        for s in services:
-            s["_id"] = str(s["_id"])
-            for prof in s.get("professionals", []):
-                prof["id"] = str(prof["id"])
 
         response = {
             "business": business.get("business", {}),
-            "professionals": professionals,
-            "services": services
         }
 
         return jsonify(response), 200
@@ -88,9 +75,9 @@ def excluir_estabelecimento():
         deleted = remover_estabelecimento(user_id)
 
         if deleted:
-            return jsonify({'message': 'Estabelecimento removido com sucesso'}), 200
+            return jsonify({'message': 'Estabelecimento removido com sucesso!'}), 200
         else:
-            return jsonify({'message': 'Nenhum estabelecimento encontrado para excluir'}), 404
+            return jsonify({'message': 'Nenhum estabelecimento encontrado para excluir.'}), 404
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500

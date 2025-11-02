@@ -15,10 +15,12 @@ import News from './components/pages/News';
 import Developers from './components/pages/Developers';
 import UserPage from './components/pages/userPage/UserPage';
 import Register from './components/pages/register/Register';
-import RegisterBusiness from './components/pages/registerBusiness/RegisterBusiness'
 
 import ScrollToTop from './components/ScrollToTop';
 import ProtectedRoute from './components/ProtectedRoute';
+import ServiceSettings from './components/pages/settingsBusiness/ServiceSettings';
+import ProfessionalSettings from './components/pages/settingsBusiness/ProfessionalSettings';
+import BasicSettings from './components/pages/settingsBusiness/BasicSettings';
 
 
 function App() {
@@ -37,9 +39,11 @@ function App() {
           <Route path="/desenvolvedores" element={<Developers />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/inicio" element={<UserPage/>} />
+            <Route path="/registro" element={<Register />}></Route>
+            <Route path="/configuracao-empresa" element={<BasicSettings />}></Route>
+            <Route path="/configuracao-servicos" element={<ServiceSettings />}></Route>
+            <Route path="/configuracao-profissionais" element={<ProfessionalSettings />}></Route>
           </Route>
-          <Route path="/registro" element={<Register />}></Route>
-          <Route path="/configuracao-empresa" element={<RegisterBusiness />}></Route>
         </Routes>
         <ToastContainer />
       </Container>
@@ -48,4 +52,4 @@ function App() {
   );
 }
 
-export default App;
+export default App
