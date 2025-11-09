@@ -3,7 +3,7 @@ from app.controllers.professional_controller import (
     cadastrar_profissional,
     atualizar_profissional_controller,
     listar_profissionais_controller,
-    buscar_profissional_controller,
+    # buscar_profissional_controller,
     remover_profissional_controller
 )
 
@@ -17,9 +17,9 @@ def post_professional():
 def get_professionals():
     return listar_profissionais_controller()
 
-@bp.route('/professionals/<id>', methods=['GET'])
-def get_professional(id):
-    return buscar_profissional_controller(id)
+# @bp.route('/professionals/<id>', methods=['GET'])
+# def get_professional(id):
+#     return buscar_profissional_controller(id)
 
 @bp.route('/professionals/<id>', methods=['PUT'])
 def put_professional(id):

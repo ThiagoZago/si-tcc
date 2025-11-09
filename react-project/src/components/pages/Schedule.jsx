@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInterceptor"
 import DatePicker from "react-datepicker";
 import { format, parse } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
@@ -33,9 +34,11 @@ function Schedule() {
 
 
 
-  // Quando trocar de business, resetar dependentes e carregar profissionais+serviços
+// 1️⃣ Quando escolher o local → buscar apenas profissionais
   useEffect(() => {
-    const businessId = formData.businessId;
+    const { businessId } = formData;
+
+    // Reset dependentes
     setFormData(prev => ({
       ...prev,
       professionalId: "",
@@ -43,42 +46,66 @@ function Schedule() {
       data: "",
       hora: "",
     }));
-    setLivres([]);
     setProfessionals([]);
     setServices([]);
     setAvailableDays([]);
+    setLivres([]);
     setSlotsError("");
 
     if (!businessId) return;
 
-    const fetchAll = async () => {
+    const fetchProfessionals = async () => {
       try {
-        const [pResp, sResp] = await Promise.all([
-          axios.get(`http://127.0.0.1:5000/businessSchedule/${businessId}/professionals`),
-          axios.get(`http://127.0.0.1:5000/businessSchedule/${businessId}/services`),
-        ]);
-        setProfessionals(pResp.data || []);
-        setServices(sResp.data || []);
-        setAvailableDays([]);
+        const res = await axiosInstance.get(`/businessSchedule/${businessId}/professionals`);
+        setProfessionals(res.data);
       } catch (err) {
-        console.error("Erro ao carregar profissionais/serviços:", err);
+        console.error("Erro ao carregar profissionais:", err);
         setProfessionals([]);
+      }
+    };
+
+    fetchProfessionals();
+  }, [formData.businessId]);
+
+
+  // 2️⃣ Quando escolher o profissional → buscar apenas serviços dele
+  useEffect(() => {
+    const { businessId, professionalId } = formData;
+
+    // Reset dependentes
+    setFormData(prev => ({
+      ...prev,
+      serviceId: "",
+      data: "",
+      hora: "",
+    }));
+    setServices([]);
+    setAvailableDays([]);
+    setLivres([]);
+    setSlotsError("");
+
+    if (!businessId || !professionalId) return;
+
+    const fetchServices = async () => {
+      try {
+        const res = await axiosInstance.get(
+          `/businessSchedule/${businessId}/services`,
+          { params: { professionalId } } // 🔹 passa o profId no backend
+        );
+        setServices(res.data);
+      } catch (err) {
+        console.error("Erro ao carregar serviços:", err);
         setServices([]);
       }
     };
-    fetchAll();
-  }, [formData.businessId]);
+
+    fetchServices();
+  }, [formData.professionalId]);
 
   const { businessId, professionalId, serviceId, data } = formData;
 
   useEffect(() => {
     
-    console.log("business:", businessId)
-    console.log("professional:", professionalId)
-    console.log("service:", serviceId)
-    console.log("=====================")
-    console.log("Services array:", services)
-    console.log("Professionals array:", professionals)
     if (!businessId || !professionalId || !serviceId) {
       setAvailableDays([]);
       return;
@@ -87,8 +114,8 @@ function Schedule() {
     let cancelled = false;
     const fetchDays = async () => {
       try {
-        const resp = await axios.get(
-          `http://127.0.0.1:5000/businessSchedule/${businessId}/days`,
+        const resp = await axiosInstance.get(
+          `/businessSchedule/${businessId}/days`,
           { params: { professionalId, serviceId } }
         );
         if (!cancelled) setAvailableDays(resp.data || []);
@@ -118,8 +145,8 @@ function Schedule() {
       setLivres([]);
 
       try {
-        const resp = await axios.get(
-          `http://127.0.0.1:5000/businessSchedule/${businessId}/slots`,
+        const resp = await axiosInstance.get(
+          `/businessSchedule/${businessId}/slots`,
           { params: { professionalId, serviceId, date: data }, timeout: 8000 }
         );
         if (!cancelled) {
@@ -165,7 +192,7 @@ function Schedule() {
       const telefonePadronizado = padronizarTelefone(formData.telefone || "");
       const requestData = { ...formData, telefone: telefonePadronizado };
 
-      const response = await axios.post("http://127.0.0.1:5000/agendar", requestData);
+      const response = await axiosInstance.post("/agendar", requestData);
       toast.success(response.data?.msg || "Agendamento realizado!");
       setFormData({
         nome: "",

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import { useState, useEffect, useRef } from "react";
+import axiosInterceptor from "../../../utils/axiosInterceptor";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -42,7 +42,7 @@ function UserHistory() {
       if (profissional) params.profissional = profissional;
       if (servico) params.servico = servico;
 
-      const response = await axios.get("http://127.0.0.1:5000/agendamentos", {
+      const response = await axiosInterceptor.get("/agendamentos", {
         headers: { Authorization: `Bearer ${token}` },
         params,
       });

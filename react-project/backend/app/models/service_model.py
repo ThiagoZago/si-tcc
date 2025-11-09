@@ -23,7 +23,7 @@ def atualizar_servico(service_id, data):
         raise ValueError("O campo 'businessId' é obrigatório para atualizar um serviço.")
 
     service_oid = ObjectId(service_id)
-    business_oid = ObjectId(data["businessId"]) if not isinstance(data["businessId"], ObjectId) else data["businessId"]
+    business_oid = ObjectId(data["businessId"])
 
     result = mongo.db.services.update_one(
         {"_id": service_oid, "businessId": business_oid},

@@ -79,11 +79,20 @@ function ServiceSettings() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProfessionals(res.data);
+      const map = {};
+      res.data.forEach((p) => {
+        const id = normalizeId(p._id || p.id);
+        map[id] = p.name;
+      });
+      setProfessionalMap(map);
       toast.info(res.data.msg || "Profissionais carregados com sucesso.")
     } catch (err) {
       toast.error(`Erro ao salvar serviço: ${err}`);
     }
   };
+
+  const [professionalMap, setProfessionalMap] = useState({});
+
 
   // 🔹 Seleção de profissional
   const handleProfessionalSelect = (rawId, name) => {
@@ -259,7 +268,10 @@ function ServiceSettings() {
                 <strong>{s.name}</strong> <small>({s.duration})</small>
                 <div>
                   <small className="text-muted">
-                    Profissionais: {(s.professionals || []).map(p => p.name).join(", ")}
+                    Profissionais: {" "}
+                    {(s.professionals || [])
+                      .map(p => professionalMap[p.id] || p.name || "Profissional removido")
+                      .join(", ")}
                   </small>
                 </div>
               </div>

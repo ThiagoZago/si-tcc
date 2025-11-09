@@ -28,10 +28,12 @@ def cadastrar_servico(request):
             prof_id = prof.get("id")
             if not prof_id or not ObjectId.is_valid(prof_id):
                 return jsonify({"error": f"ID de profissional inválido: {prof_id}"}), 400
+            
+            business_id = str(business["_id"])
 
             found = mongo.db.professionals.find_one({
                 "_id": ObjectId(prof_id),
-                "businessId": business["_id"]
+                "businessId": business_id
             })
             if not found:
                 return jsonify({
@@ -63,17 +65,19 @@ def atualizar_servico_controller(request, id):
         data = request.get_json()
         data["businessId"] = business["_id"]
 
-        professionals_input = data.get("professionals", [])
+        professionals_input = data.get("professionals")
         valid_professionals = []
 
         for prof in professionals_input:
-            prof_id = prof.get("id")
+            prof_id = ObjectId(prof.get("id"))
             if not prof_id or not ObjectId.is_valid(prof_id):
                 return jsonify({"error": f"ID de profissional inválido: {prof_id}"}), 400
 
+            business_id = str(business["_id"])
+
             found = mongo.db.professionals.find_one({
-                "_id": ObjectId(prof_id),
-                "businessId": business["_id"]
+                "_id": prof_id,
+                "businessId": business_id
             })
             if not found:
                 return jsonify({

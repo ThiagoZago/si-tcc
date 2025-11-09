@@ -1,16 +1,31 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify"
 import axiosInstance from "../../../utils/axiosInterceptor";
 import AvailabilityProfessionals from './AvailabilityProfessionals';
+
+import Modal from "bootstrap/js/dist/modal";
 
 function ProfessionalSettings() {
 
   const navigate = useNavigate();
+  const [originalProfessionals, setOriginalProfessionals] = useState([]);
   const [professionals, setProfessionals] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [professionalNameModal, setProfessionalNameModal] = useState(null);
+  const [professionalIdModal, setProfessionalIdModal] = useState(null);
+
+  const modalRef = useRef(null);
+  const modalInstanceRef  = useRef(null);
+
   useEffect(() => {
     fetchProfessionals();
+    if (modalRef.current) {
+      modalInstanceRef.current = new Modal(modalRef.current, {
+        backdrop: "static",
+      });
+    }
   }, []);
   
   const fetchProfessionals = async () => {
@@ -20,15 +35,30 @@ function ProfessionalSettings() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProfessionals(res.data);
+      setOriginalProfessionals(JSON.parse(JSON.stringify(res.data)))
+      toast.info("Dados carregados!")
     } catch (err) {
-      console.error("Erro ao carregar profissionais:", err);
+      toast.error(`Erro ao carregar profissionais: ${err}`)
     } finally {
       setLoading(false);
     }
   };
 
   const handleAdd = async () => {
-    const novo = { name: "", role: "", availability: Array(7).fill({}), exceptions: [] };
+    const novo = {
+      name: "",
+      role: "",
+      availability: {
+        segunda: {},
+        terca: {},
+        quarta: {},
+        quinta: {},
+        sexta: {},
+        sabado: {},
+        domingo: {}
+      },
+      exceptions: []
+    };
     try {
       const token = localStorage.getItem("token");
       const res = await axiosInstance.post("/professionals", novo, {
@@ -41,52 +71,127 @@ function ProfessionalSettings() {
     }
   };
 
-  const handleChange = async (index, e) => {
-    const prof = professionals[index];
-    const updated = { ...prof, [e.target.name]: e.target.value };
-    setProfessionals((prev) => prev.map((p, i) => (i === index ? updated : p)));
+  const handleChange = async (index, eOrData) => {
+    const name = eOrData?.target?.name || eOrData?.name;
+    const value = eOrData?.target?.value ?? eOrData?.value;
 
+    if (!name) {
+      console.warn("handleChange chamado sem nome de campo válido");
+      return;
+    }
+
+    setProfessionals((prev) =>
+      prev.map((p, i) =>
+        i === index ? { ...p, [name]: value } : p
+      )
+    );
+  };
+
+  const openModal = (index) => {
+    modalInstanceRef.current?.show();
+    const p = professionals[index];
+    setProfessionalNameModal(p.name);
+    setProfessionalIdModal(p._id);
+  };
+
+  const closeModal = () => {
+    modalInstanceRef.current?.hide();
+    setProfessionalNameModal(null);
+    setProfessionalIdModal(null);
+  };
+
+  const isValidProfessional = (prof) => {
+    // Nome e função obrigatórios
+    if (!prof.name || prof.name.trim() === "") return false;
+    if (!prof.role || prof.role.trim() === "") return false;
+    return true;
+  };
+  const hasInvalidProfessionals = professionals.some((p) => !isValidProfessional(p));
+
+
+  const handleDelete = async () => {
+    closeModal();
     try {
       const token = localStorage.getItem("token");
-      await axiosInstance.put(`/professionals/${prof._id}`, updated, {
+      await axiosInstance.delete(`/professionals/${professionalIdModal}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+
+      setProfessionals((prev) => prev.filter((p) => p._id !== professionalIdModal));
+      toast.success(`Profissional "${professionalNameModal}" removido com sucesso!`);
     } catch (err) {
-      console.error("Erro ao atualizar profissional:", err);
+      toast.error("Erro ao excluir profissional.");
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Excluir este profissional?")) return;
+  const handleSaveAll = async () => {
     try {
       const token = localStorage.getItem("token");
-      await axiosInstance.delete(`/professionals/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
+
+      const changedProfessionals = professionals.filter((prof, index) => {
+        const original = originalProfessionals[index];
+        return JSON.stringify(prof) !== JSON.stringify(original);
       });
+
+      if (changedProfessionals.length === 0) {
+        toast.info("Nenhuma alteração detectada.");
+        return;
+      }
+
+      await Promise.all(
+        changedProfessionals.map((prof) => {
+          const { _id, ...data } = prof;
+          const normalizedAvailability = normalizeAvailability(prof.availability);
+          const payload = {
+            ...data,
+            availability: normalizedAvailability,
+          };
+          return axiosInstance.put(`/professionals/${_id}`, payload, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+        })
+      );
+
+      toast.success("Alterações salvas com sucesso!");
       fetchProfessionals();
     } catch (err) {
-      console.error("Erro ao excluir:", err);
+      const msg = err.response?.data?.error || "Erro ao salvar alterações.";
+      toast.error(msg);
     }
   };
-
-  // const handleAvailabilityChange = (index, newAvailability) => {
-  //   const updated = [...professionals];
-  //   updated[index].availability = newAvailability;
-  //   setProfessionals(updated);
-  // };
-
-  // const handleExceptionsChange = (index, newExceptions) => {
-  //   const updated = [...professionals];
-  //   updated[index].exceptions = newExceptions;
-  //   setProfessionals(updated);
-  // };
 
   const goBack = async () => {
     navigate("/inicio");
   }
 
+  const normalizeAvailability = (availability) => {
+    const days = ["segunda", "terca", "quarta", "quinta", "sexta", "sabado", "domingo"];
+
+    const normalized = {};
+    for (const day of days) {
+      const info = availability?.[day] || {};
+      normalized[day] = info.active
+        ? {
+            active: true,
+            start: info.start || "",
+            end: info.end || "",
+            lunchStart: info.lunchStart || "",
+            lunchEnd: info.lunchEnd || "",
+          }
+        : { active: false };
+    }
+
+    return normalized;
+  };
+
   return (
     <div className="container py-5">
+      {hasInvalidProfessionals && (
+        <div className="alert alert-warning py-2">
+          Preencha todos os campos de <strong>Nome, Função e Horários</strong> antes de salvar.
+        </div>
+      )}
+
       <h2 className="h5 mb-4">Profissionais</h2>
       {loading ? (
         <p>Carregando...</p>
@@ -117,7 +222,7 @@ function ProfessionalSettings() {
               <div className="col-md-2">
                 <button
                   className="btn btn-outline-danger w-100"
-                  onClick={() => handleDelete(prof._id)}
+                  onClick={() => openModal(index)}
                 >
                   Remover
                 </button>
@@ -142,9 +247,58 @@ function ProfessionalSettings() {
         <button className="btn btn-secondary" onClick={goBack}>Voltar</button>
         <div>
           <button className="btn btn-outline-primary me-2" onClick={handleAdd}>Novo profissional</button>
-          <button className="btn btn-success" onClick={handleChange}>Salvar</button>
+          <button className="btn btn-success" onClick={handleSaveAll} disabled={hasInvalidProfessionals}>Salvar</button>
         </div>
       </div>
+      {/* Modal Bootstrap */}
+      <div
+        ref={modalRef}
+        className="modal fade"
+        id="confirmDeleteModal"
+        tabIndex="-1"
+        aria-labelledby="confirmDeleteLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="confirmDeleteLabel">
+                Atenção!
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                onClick={closeModal}
+                aria-label="Fechar"
+              ></button>
+            </div>
+            <div className="modal-body">
+              Tem certeza que deseja excluir profissional <strong>"{professionalNameModal}"</strong>? Esta ação não poderá ser desfeita!
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={closeModal}
+              >
+                Cancelar
+              </button>
+              <button type="button" className="btn btn-danger" onClick={() => handleDelete()}>
+                Excluir profissional
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+        draggable
+      />
     </div>
   );
 }
