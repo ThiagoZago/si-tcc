@@ -40,12 +40,13 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "latest",
+    "dotenv": "^17.4.2",
     "jwt-decode": "^4.0.0",
     "libphonenumber-js": "latest",
     "lucide-react": "^0.454.0",
-    "react": "^19",
+    "react": "^18.2.0",
     "react-datepicker": "latest",
-    "react-dom": "^19",
+    "react-dom": "^18.2.0",
     "react-router-dom": "latest",
     "react-scripts": "5.0.1",
     "react-toastify": "latest",
@@ -59,6 +60,6 @@
     "@types/react-dom": "^19",
     "postcss": "^8.5",
     "tailwindcss": "4.1.14",
-    "typescript": "^5"
+    "typescript": "^4.9.5"
   }
 }

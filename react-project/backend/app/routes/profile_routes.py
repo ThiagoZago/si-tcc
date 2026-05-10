@@ -1,4 +1,5 @@
 import re
+import json
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -22,10 +23,14 @@ def get_profile():
         business = mongo.db.business.find_one({"usuario_id": email})
         business_name = business.get("business", {}).get("name") if business else None
 
-        return jsonify({
+        res_data = {
             "email": user["username"],
             "businessName": business_name or "Nenhum negócio vinculado"
-        }), 200
+        }
+        print(json.dumps(res_data, indent=4, ensure_ascii=False))
+
+        return jsonify(res_data), 200
+        
 
     except Exception as e:
         return jsonify({"msg": f"Erro ao obter perfil: {str(e)}"}), 500

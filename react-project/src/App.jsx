@@ -31,6 +31,7 @@ function App() {
       <Container>
         <Routes>
           <Route path="/" exact element={<Home />} />
+          <Route path="/registro" element={<Register />}/>
           <Route path="/sobre-nos" element={<About />} />
           <Route path="/ajuda" element={<Help />}/>
           <Route path="/agendar" element={<Schedule />}/>
@@ -39,7 +40,6 @@ function App() {
           <Route path="/desenvolvedores" element={<Developers />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/inicio" element={<UserPage/>} />
-            <Route path="/registro" element={<Register />}></Route>
             <Route path="/configuracao-empresa" element={<BasicSettings />}></Route>
             <Route path="/configuracao-servicos" element={<ServiceSettings />}></Route>
             <Route path="/configuracao-profissionais" element={<ProfessionalSettings />}></Route>

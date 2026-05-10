@@ -1,3 +1,4 @@
+import json
 from flask import Flask, Blueprint, request, jsonify
 from bson import ObjectId, json_util
 from datetime import datetime, timedelta
@@ -181,6 +182,8 @@ def agendar():
     }
 
     inserted = mongo.db.schedules.insert_one(agendamento)
+
+    print(agendamento)
 
     return res_json({
         "msg": "Agendamento realizado com sucesso!",

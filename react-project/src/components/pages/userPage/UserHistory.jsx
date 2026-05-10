@@ -3,9 +3,11 @@ import axiosInterceptor from "../../../utils/axiosInterceptor";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+
 function UserHistory() {
-  const [filtro, setFiltro] = useState("todos");
-  const [ordenar, setOrdenar] = useState("desc");
+  const [mostrarFiltros, setMostrarFiltros] = useState(false);
+  const [filtro, setFiltro] = useState("futuros");
+  const [ordenar, setOrdenar] = useState("asc");
   const [data, setData] = useState("");
   const [dataInicio, setDataInicio] = useState("");
   const [dataFim, setDataFim] = useState("");
@@ -13,6 +15,18 @@ function UserHistory() {
   const [telefone, setTelefone] = useState("");
   const [profissional, setProfissional] = useState("");
   const [servico, setServico] = useState("");
+
+  const limparFiltros = () => {
+    setFiltro("futuros");
+    setOrdenar("asc");
+    setData("");
+    setDataInicio("");
+    setDataFim("");
+    setCliente("");
+    setTelefone("");
+    setProfissional("");
+    setServico("");
+  };
 
   const [agendamentos, setAgendamentos] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -114,141 +128,147 @@ function UserHistory() {
             <button
                 className="btn btn-outline-secondary"
                 type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#filtrosCollapse"
-                aria-expanded="false"
-                aria-controls="filtrosCollapse"
+                onClick={() => setMostrarFiltros(!mostrarFiltros)}
             >
-                Filtros
+                {mostrarFiltros ? "Ocultar" : "Filtros"}
+            </button>
+            <button
+              className="btn btn-outline-danger ms-2"
+              onClick={limparFiltros}
+            >
+              Limpar
             </button>
         </div>
 
 
-        {/* Collapse dos Filtros */}
-        <div className="collapse mb-4" id="filtrosCollapse">
-          <div className="card p-3 shadow-sm">
-            <div className="row g-3">
-              <div className="col-md-3">
-                <label className="form-label">Tipo</label>
-                <select
-                  className="form-select"
-                  value={filtro}
-                  onChange={(e) => setFiltro(e.target.value)}
-                >
-                  <option value="futuros">Futuros</option>
-                  <option value="passados">Passados</option>
-                  <option value="todos">Todos</option>
-                </select>
-              </div>
+        {/* Filtros */}
+        {mostrarFiltros && (
+          <div className="mb-4">
+            <div className="card p-3 shadow-sm">
+              <div className="row g-3">
+                <div className="col-md-3">
+                  <label className="form-label">Tipo</label>
+                  <select
+                    className="form-select"
+                    value={filtro}
+                    onChange={(e) => setFiltro(e.target.value)}
+                  >
+                    <option value="futuros">Futuros</option>
+                    <option value="passados">Passados</option>
+                    <option value="todos">Todos</option>
+                  </select>
+                </div>
 
-              <div className="col-md-3">
-                <label className="form-label">Ordenar</label>
-                <select
-                  className="form-select"
-                  value={ordenar}
-                  onChange={(e) => setOrdenar(e.target.value)}
-                >
-                  <option value="asc">Mais antigos acima</option>
-                  <option value="desc">Mais recentes acima</option>
-                </select>
-              </div>
+                <div className="col-md-3">
+                  <label className="form-label">Ordenar</label>
+                  <select
+                    className="form-select"
+                    value={ordenar}
+                    onChange={(e) => setOrdenar(e.target.value)}
+                  >
+                    <option value="asc">Mais antigos acima</option>
+                    <option value="desc">Mais recentes acima</option>
+                  </select>
+                </div>
 
-              <div className="col-md-3">
-                <label className="form-label">Data Exata</label>
-                <input
-                  type="date"
-                  className="form-control"
-                  value={data}
-                  onChange={(e) => setData(e.target.value)}
-                />
-              </div>
+                <div className="col-md-3">
+                  <label className="form-label">Data Exata</label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    value={data}
+                    onChange={(e) => setData(e.target.value)}
+                  />
+                </div>
 
-              {/* Intervalo de datas */}
-              <div className="col-md-6">
-                <div className="row g-2">
-                  <div className="col-md-6">
-                    <label className="form-label">Data Início</label>
-                    <input
-                      type="date"
-                      className="form-control"
-                      value={dataInicio}
-                      onChange={(e) => setDataInicio(e.target.value)}
-                    />
+                {/* Intervalo de datas */}
+                <div className="col-md-6">
+                  <div className="row g-2">
+                    <div className="col-md-6">
+                      <label className="form-label">Data Início</label>
+                      <input
+                        type="date"
+                        className="form-control"
+                        value={dataInicio}
+                        onChange={(e) => setDataInicio(e.target.value)}
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <label className="form-label">Data Fim</label>
+                      <input
+                        type="date"
+                        className="form-control"
+                        value={dataFim}
+                        onChange={(e) => setDataFim(e.target.value)}
+                      />
+                    </div>
                   </div>
-                  <div className="col-md-6">
-                    <label className="form-label">Data Fim</label>
-                    <input
-                      type="date"
-                      className="form-control"
-                      value={dataFim}
-                      onChange={(e) => setDataFim(e.target.value)}
-                    />
-                  </div>
+                </div>
+
+                <div className="col-md-3">
+                  <label className="form-label">Cliente</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={cliente}
+                    onChange={(e) => setCliente(e.target.value)}
+                    placeholder="Nome do cliente"
+                  />
+                </div>
+
+                <div className="col-md-3">
+                  <label className="form-label">Telefone</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={telefone}
+                    onChange={(e) => setTelefone(e.target.value)}
+                    placeholder="Telefone"
+                  />
+                </div>
+
+                <div className="col-md-3">
+                  <label className="form-label">Profissional</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={profissional}
+                    onChange={(e) => setProfissional(e.target.value)}
+                    placeholder="Nome do profissional"
+                  />
+                </div>
+
+                <div className="col-md-3">
+                  <label className="form-label">Serviço</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={servico}
+                    onChange={(e) => setServico(e.target.value)}
+                    placeholder="Nome do serviço"
+                  />
                 </div>
               </div>
 
-              <div className="col-md-3">
-                <label className="form-label">Cliente</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={cliente}
-                  onChange={(e) => setCliente(e.target.value)}
-                  placeholder="Nome do cliente"
-                />
+              <div className="text-end mt-3">
+                <button
+                  className="btn btn-primary"
+                  onClick={fetchAgendamentos}
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      role="status"
+                    />
+                  ) : null}
+                  Aplicar Filtros
+                </button>
               </div>
-
-              <div className="col-md-3">
-                <label className="form-label">Telefone</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={telefone}
-                  onChange={(e) => setTelefone(e.target.value)}
-                  placeholder="Telefone"
-                />
-              </div>
-
-              <div className="col-md-3">
-                <label className="form-label">Profissional</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={profissional}
-                  onChange={(e) => setProfissional(e.target.value)}
-                  placeholder="Nome do profissional"
-                />
-              </div>
-
-              <div className="col-md-3">
-                <label className="form-label">Serviço</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={servico}
-                  onChange={(e) => setServico(e.target.value)}
-                  placeholder="Nome do serviço"
-                />
-              </div>
-            </div>
-
-            <div className="text-end mt-3">
-              <button
-                className="btn btn-primary"
-                onClick={fetchAgendamentos}
-                disabled={loading}
-              >
-                {loading ? (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    role="status"
-                  />
-                ) : null}
-                Aplicar Filtros
-              </button>
             </div>
           </div>
-        </div>
+        )}
+        
 
         {/* Lista de Agendamentos */}
         {loading ? (
