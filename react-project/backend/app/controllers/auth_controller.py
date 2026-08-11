@@ -29,10 +29,16 @@ def register(request):
     return jsonify({"msg": "Usuário registrado com sucesso"}), 201
 
 def login(request):
-    data = request.get_json()
-    user = mongo.db.system.find_one({"username": data["username"]})
+    data = request.get_json(silent=True) or {}
+    username = data.get("username")
+    password = data.get("password")
 
-    if not user or not check_password_hash(user["password"], data["password"]):
+    if not username or not password:
+        return jsonify({"msg": "Usúario e senha são obrigatórios."}), 400
+
+    user = mongo.db.system.find_one({"username" : username})
+
+    if not user or not check_password_hash(user["password"], password):
         return jsonify({"msg": "Erro ao efetuar login. Verifique suas credenciais."}), 401
 
     access_token = create_access_token(identity=data["username"], expires_delta=timedelta(days=7))
