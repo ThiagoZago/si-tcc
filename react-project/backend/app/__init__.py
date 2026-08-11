@@ -1,5 +1,5 @@
 from flask import Flask
-from .extensions import mongo, jwt, cors
+from .extensions import mongo, jwt, cors, limiter
 from .routes import auth_routes, schedule_routes, business_routes, history_routes, professional_routes, service_routes, profile_routes
 from .config import DevelopmentConfig
 from dotenv import load_dotenv
@@ -20,6 +20,7 @@ def create_app():
 
     mongo.init_app(app)
     jwt.init_app(app)
+    limiter.init_app(app)
     cors.init_app(app, resources={
         r"/*": {
             "origins": allowed_origins,

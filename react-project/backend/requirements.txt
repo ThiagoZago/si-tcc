@@ -3,4 +3,5 @@ python-dotenv
 Flask-PyMongo
 Flask-JWT-Extended
 Flask-Cors
+Flask-Limiter
 Werkzeug
