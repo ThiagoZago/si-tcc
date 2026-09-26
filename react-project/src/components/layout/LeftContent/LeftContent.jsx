@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import BtnComponent from '../../BtnComponent';
+import { useState, useEffect, useRef } from 'react';
+import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import styles from './LeftContent.module.css';
 
 function LeftContent(props) {
@@ -9,40 +10,18 @@ function LeftContent(props) {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
+        if (entry.isIntersecting) setIsVisible(true);
       },
-      {
-        threshold: 0.3, // Visível quando 30% do elemento está na viewport
-      }
+      { threshold: 0.3 }
     );
 
     const currentRef = sectionRef.current;
-
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
+    if (currentRef) observer.observe(currentRef);
 
     return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
+      if (currentRef) observer.unobserve(currentRef);
     };
   }, []);
-
-  const styleBg = {
-    backgroundColor: `${props.backgroundComponent}`,
-    border: `${props.border}`,
-    borderRadius: '0.5em',
-  };
-  const pColor = {
-    color: `${props.pColor}`,
-    fontSize:'1.2em',
-  };
-  const titleColor = {
-    color: `${props.titleColor}`,
-  };
 
   return (
     <section
@@ -50,34 +29,41 @@ function LeftContent(props) {
       className={`${styles.caixa} ${isVisible ? styles.animateIn : styles.hidden}`}
     >
       <div className="container">
-        <div style={styleBg} className="row">
-          <div className="col-md-6 rounded-start p-5">
-            <h3 style={titleColor} className={`fs-2 ${styles.title}`}>
+        <div className="row align-items-center g-5">
+          <div className="col-md-6 order-2 order-md-1">
+            {props.eyebrow && (
+              <span className={styles.eyebrow}>
+                <span className={styles.dash}></span>
+                {props.eyebrow}
+              </span>
+            )}
+
+            <h3 className={styles.title}>
               {props.title}
+              {props.titleAccent && (
+                <>
+                  <br />
+                  <span className={styles.titleAccent}>{props.titleAccent}</span>
+                </>
+              )}
             </h3>
-            <div className='py-4'>
-              <p style={pColor}>{props.p1}</p>
-              <p style={pColor}>{props.p2}</p>
-              <p style={pColor}>{props.p3}</p>
-              <p style={pColor}>{props.p4}</p>
+
+            <div className={styles.text}>
+              <p>{props.p1}</p>
+              <p>{props.p2}</p>
+              {props.p3 && <p>{props.p3}</p>}
+              {props.p4 && <p>{props.p4}</p>}
             </div>
-            <div>
-              <BtnComponent
-              to="/acesso"
-              textButton="COMECE AGORA"
-              textColor="#b91616"
-              borderColor="#2c2c2c"
-              backgroundColor="#000"
-              />
-            </div>
-            
+
+            <Link to="/acesso" className={styles.ctaLink}>
+              Comece agora <ArrowRight size={18} strokeWidth={2.5} />
+            </Link>
           </div>
-          <div className="col-md-6 px-0">
-            <img
-              src={props.srcImg}
-              className="img-fluid rounded-end"
-              alt={props.altImg}
-            />
+
+          <div className="col-md-6 order-1 order-md-2">
+            <div className={styles.imageFrame}>
+              <img src={props.srcImg} alt={props.altImg} />
+            </div>
           </div>
         </div>
       </div>

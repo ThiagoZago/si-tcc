@@ -1,25 +1,98 @@
 .caixa {
-    min-height:90vh;
+    min-height: 90vh;
     align-content: center;
+    padding: 4rem 0;
+    background: linear-gradient(180deg, #b91616 0%, #0c0c0c 100%);
+}
+
+/* ---- Imagem ---- */
+.imageFrame {
+    position: relative;
+    border-radius: 0.75em;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+}
+
+.imageFrame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.7s ease;
+}
+
+.imageFrame:hover img {
+    transform: scale(1.05);
+}
+
+/* ---- Texto ---- */
+.eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 1.25rem;
+}
+
+.dash {
+    display: inline-block;
+    width: 24px;
+    height: 2px;
+    background-color: #fff;
 }
 
 .title {
-    margin-bottom: 1em;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: #fff;
+    margin-bottom: 1.5rem;
 }
 
-p {
-    font-weight: 600;
+.titleAccent {
+    color: #fff;
+    opacity: 0.55;
 }
 
-/* Estado inicial (fora da tela) */
+.text p {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 1.1rem;
+}
+
+.ctaLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: gap 0.3s ease, opacity 0.3s ease;
+}
+
+.ctaLink:hover {
+    gap: 0.85rem;
+    opacity: 0.75;
+}
+
+/* ---- Animação de scroll ---- */
 .hidden {
   opacity: 0;
-  transform: translateY(100px); /* Componente começa abaixo */
+  transform: translateY(60px);
 }
 
-/* Animação de entrada */
 .animateIn {
   opacity: 1;
-  transform: translateY(0); /* Volta à posição original */
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Transição suave */
+  transform: translateY(0);
+  transition: opacity 0.9s ease-out, transform 0.9s ease-out;
 }

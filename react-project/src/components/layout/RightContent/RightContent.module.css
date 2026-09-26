@@ -1,26 +1,117 @@
 .caixa {
-    min-height:90vh;
+    min-height: 90vh;
     align-content: center;
+    background-color: #fff;
+    padding: 4rem 0;
+}
+
+/* ---- Imagem ---- */
+.imageFrame {
+    position: relative;
+    border-radius: 0.75em;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+}
+
+.imageFrame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.7s ease;
+}
+
+.imageFrame:hover img {
+    transform: scale(1.05);
+}
+
+.imageOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 45%);
+    pointer-events: none;
+}
+
+.imageCaption {
+    position: absolute;
+    left: 1.5rem;
+    bottom: 1.5rem;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: rgba(185, 22, 22, 0.9);
+    padding: 0.35rem 0.75rem;
+    border-radius: 0.25em;
+}
+
+/* ---- Texto ---- */
+.eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #b91616;
+    margin-bottom: 1.25rem;
+}
+
+.dash {
+    display: inline-block;
+    width: 24px;
+    height: 2px;
+    background-color: #b91616;
 }
 
 .title {
-    margin-bottom: 1em;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: #0c0c0c;
+    margin-bottom: 1.5rem;
 }
 
-p {
-    font-weight: 600;
+.titleAccent {
+    color: #b91616;
 }
 
-/* Estado inicial (fora da tela) */
+.text p {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: rgba(12, 12, 12, 0.65);
+    margin-bottom: 1.1rem;
+}
+
+.ctaLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    color: #0c0c0c;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: gap 0.3s ease, color 0.3s ease;
+}
+
+.ctaLink:hover {
+    gap: 0.85rem;
+    color: #b91616;
+}
+
+/* ---- Animação de scroll ---- */
 .hidden {
   opacity: 0;
-  transform: translateY(100px); /* Componente começa abaixo */
+  transform: translateY(60px);
 }
 
-/* Animação de entrada */
 .animateIn {
   opacity: 1;
-  transform: translateY(0); /* Volta à posição original */
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Transição suave */
+  transform: translateY(0);
+  transition: opacity 0.9s ease-out, transform 0.9s ease-out;
 }
-

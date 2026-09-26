@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import BtnComponent from '../../BtnComponent';
 import styles from './Article.module.css';
 
 function Article(props) {
   const [isVisible, setIsVisible] = useState(false);
+  const articleRef = useRef(null);
 
   useEffect(() => {
     // Criação do observer
@@ -18,23 +19,17 @@ function Article(props) {
       }
     );
 
-    // Seleciona o artigo que será observado
-    const artigoElement = document.getElementById('artigo');
-    if (artigoElement) {
-      observer.observe(artigoElement);
-    }
+    const current = articleRef.current;
+    if (current) observer.observe(current);
 
-    // Limpeza do observer
     return () => {
-      if (artigoElement) {
-        observer.unobserve(artigoElement);
-      }
+      if (current) observer.unobserve(current);
     };
   }, []);
 
   return (
     <div
-      id="artigo"
+      ref={articleRef}
       className={`${styles.artigo} ${isVisible ? styles.visible : ''} col-md-3 mx-auto`}
     >
       <h4>{props.title}</h4>

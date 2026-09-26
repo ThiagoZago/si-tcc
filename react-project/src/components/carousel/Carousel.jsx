@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import BtnComponent from '../BtnComponent';
 import { useState } from 'react';
+import { colors } from '../../theme';
 
 
 function Carousel() {
@@ -11,7 +12,7 @@ function Carousel() {
     const [isHoveredNext, setIsHoveredNext] = useState(false);
 
     const gradient = {
-        backgroundImage: 'linear-gradient(#000, #b91616)',
+        backgroundImage: `linear-gradient(${colors.black}, ${colors.red})`,
     }
     const capa = {
         textAlign: 'center',
@@ -44,15 +45,15 @@ function Carousel() {
                                     <BtnComponent
                                         to='/agendar'
                                         textButton='pelo whatsapp'
-                                        textColor='#fff'
+                                        textColor={colors.white}
                                         borderColor='rgba(255,255,255,0.5)'
-                                        backgroundColor='#2c2c2c'
+                                        backgroundColor={colors.darkSoft}
                                     />
                                     <BtnComponent
                                         to='/agendar'
                                         textButton='pelo site'
-                                        textColor='#000'
-                                        borderColor='#2c2c2c'
+                                        textColor={colors.black}
+                                        borderColor={colors.darkSoft}
                                         backgroundColor='rgba(255,255,255,0.9)'
                                     />
                                 </div>
@@ -62,9 +63,9 @@ function Carousel() {
                                     <BtnComponent
                                         to='/acesso'
                                         textButton='VAMOS NESSA!'
-                                        textColor='#fff'
-                                        borderColor='#2c2c2c'
-                                        backgroundColor='#000'
+                                        textColor={colors.white}
+                                        borderColor={colors.darkSoft}
+                                        backgroundColor={colors.black}
                                     />
                                 </div>
                             </div>

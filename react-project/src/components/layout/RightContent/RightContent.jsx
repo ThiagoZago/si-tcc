@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import BtnComponent from '../../BtnComponent';
+import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import styles from './RightContent.module.css';
 
 function RightContent(props) {
@@ -9,41 +10,18 @@ function RightContent(props) {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
+        if (entry.isIntersecting) setIsVisible(true);
       },
-      {
-        threshold: 0.3, // Visível quando 30% do elemento está na viewport
-      }
+      { threshold: 0.3 }
     );
 
     const currentRef = sectionRef.current;
-
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
+    if (currentRef) observer.observe(currentRef);
 
     return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
+      if (currentRef) observer.unobserve(currentRef);
     };
   }, []);
-
-  const styleBg = {
-    backgroundColor: `${props.backgroundComponent}`,
-    border: `${props.border}`,
-    borderRadius: '2.5em',
-    padding: '30px',
-    textAlign: 'center',
-  };
-  const pColor = {
-    color: `${props.pColor}`,
-  };
-  const titleColor = {
-    color: `${props.titleColor}`,
-  };
 
   return (
     <section
@@ -51,30 +29,44 @@ function RightContent(props) {
       className={`${styles.caixa} ${isVisible ? styles.animateIn : styles.hidden}`}
     >
       <div className="container">
-        <div className="row align-items-center">
+        <div className="row align-items-center g-5">
           <div className="col-md-6">
-            <img
-              src={props.srcImg}
-              className="rounded mx-auto d-block"
-              alt={props.altImg}
-              height="480px"
-            />
+            <div className={styles.imageFrame}>
+              <img src={props.srcImg} alt={props.altImg} />
+              <div className={styles.imageOverlay}></div>
+              {props.imageCaption && (
+                <span className={styles.imageCaption}>{props.imageCaption}</span>
+              )}
+            </div>
           </div>
-          <div style={styleBg} className="col-md-6 d-block">
-            <h3 style={titleColor} className={`fs-2 ${styles.title}`}>
+
+          <div className="col-md-6">
+            {props.eyebrow && (
+              <span className={styles.eyebrow}>
+                <span className={styles.dash}></span>
+                {props.eyebrow}
+              </span>
+            )}
+
+            <h3 className={styles.title}>
               {props.title}
+              {props.titleAccent && (
+                <>
+                  <br />
+                  <span className={styles.titleAccent}>{props.titleAccent}</span>
+                </>
+              )}
             </h3>
-            <p style={pColor}>{props.p1}</p>
-            <p style={pColor}>{props.p2}</p>
-            <p style={pColor}>{props.p3}</p>
-            <p style={pColor}>{props.p4}</p>
-            <BtnComponent
-              to="/acesso"
-              textButton="CRIAR CONTA"
-              textColor="#fff"
-              borderColor="#fff"
-              backgroundColor="#2c2c2c"
-            />
+
+            <div className={styles.text}>
+              <p>{props.p1}</p>
+              <p>{props.p2}</p>
+              {props.p3 && <p>{props.p3}</p>}
+            </div>
+
+            <Link to="/acesso" className={styles.ctaLink}>
+              Criar conta <ArrowRight size={18} strokeWidth={2.5} />
+            </Link>
           </div>
         </div>
       </div>

@@ -2,12 +2,35 @@
 /**************** EDIÇÕES GERAIS ***************/
 /*=============================================*/
 
-html, body, #home{
-  /* background-color: #3A6D8C; */
-  background-color: rgba(185, 22, 22, 0.9);
-  height: 100vh;
+
+/*=============================================*/
+/************ VARIÁVEIS DE TEMA (BARBAPP) ******/
+/*=============================================*/
+
+:root {
+  /* Cores de marca */
+  --color-black: #000;
+  --color-dark-soft: #2c2c2c;
+  --color-red: #b91616;
+  --color-red-dark: #5f0b0b;
+  --color-gray: #919496;
+  --color-white: #fff;
+
+  /* Cores de fundo (com transparência) */
+  --color-red-bg: rgba(185, 22, 22, 0.9);
+  --color-white-soft: rgba(255, 255, 255, 0.9);
+}
+
+
+
+html, body{
   overflow-x: hidden;
 }
+
+#home{
+  min-height: 100vh;
+}
+
 
 body {
   margin: 0;
@@ -40,16 +63,16 @@ code {
 
 nav.navbar-transparent{
   padding: 15px 0;
-  background: rgba(0, 0, 0, 1);
+  background: var(--color-black);
 }
 
 .navbar-light .navbar-nav .nav-link{
-  color: #fff;
+  color: var(--color-white);
   font-weight: bold;
 }
 
 .navbar-light .navbar-nav .nav-link:hover{
-  color: #b91616;
+  color: var(--color-red);
 }
 
 .navbar-light .navbar-toggler{
@@ -59,7 +82,7 @@ nav.navbar-transparent{
 .divisor{
   width: 1px;
   margin: 12px 15px;
-  background: #b91616;
+  background: var(--color-red);
 }
 /*
 *
@@ -78,25 +101,25 @@ nav.navbar-transparent{
 /*=============================================*/
 
 footer{
-  background: #000;
+  background: var(--color-black);
   padding: 50px 0 20px 0;
   position: relative;
 }
 
 footer h4{
-  color: #919496;
+  color: var(--color-gray);
   font-size: 0.8em;
   text-transform: uppercase;
 }
 
 footer .navbar-nav a{
   text-decoration: none;
-  color: #fff;
+  color: var(--color-white);
   font-size: 0.8em;
 }
 
 footer .navbar-nav a:hover{
-  color: #b91616;
+  color: var(--color-red);
   font-size: 0.8em;
   text-decoration: none;
 }
@@ -125,34 +148,34 @@ footer ul li {
 /*=============================================*/
 
 #accordionExample .accordion-item .accordion-button:not(.collapsed) {
-  background-color: #5f0b0b;
+  background-color: var(--color-red-dark);
   text-decoration: underline;
-  color:#fff;
+  color: var(--color-white);
   font-weight: 500; 
 }
 
 
 /* Estilo para o item colapsado */
 #accordionExample .accordion-item {
-  border-bottom: 1px solid #2c2c2c;
+  border-bottom: 1px solid var(--color-dark-soft);
 }
 
 /* Quando o item estiver recolhido */
 #accordionExample .accordion-item:not(.accordion-button.collapsed) {
-  background-color: #2c2c2c;
-  color: #fff;
+  background-color: var(--color-dark-soft);
+  color: var(--color-white);
 }
 
 /* Quando o item está colapsado (recolhido) */
 #accordionExample .accordion-button.collapsed {
-  color:#000;
+  color: var(--color-black);
   font-weight: 500;
   transition: background-color 0.4s, color 0.4s, text-decoration 0.4s;
 }
 
 #accordionExample .accordion-button.collapsed:hover{
-  background-color: #5f0b0b;
-  color: #fff;
+  background-color: var(--color-red-dark);
+  color: var(--color-white);
   text-decoration: underline;
 }
 
