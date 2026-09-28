@@ -1,25 +1,23 @@
 import { useEffect, useState, useRef } from 'react';
+import { ArrowRight, Check } from 'lucide-react';
 import BtnComponent from '../../BtnComponent';
 import styles from './Article.module.css';
 
 function Article(props) {
   const [isVisible, setIsVisible] = useState(false);
-  const articleRef = useRef(null);
+  const cardRef = useRef(null);
+  const Icon = props.icon;
 
   useEffect(() => {
     // Criação do observer
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);  // Quando o artigo entra na tela, torna-se visível
-        }
+        if (entry.isIntersecting) setIsVisible(true);  // Quando o artigo entra na tela, torna-se visível
       },
-      {
-        threshold: 0.5, // Define que o artigo deve estar 50% visível para ser considerado visível
-      }
+      { threshold: 0.5 } // Define que o artigo deve estar 50% visível para ser considerado visível
     );
 
-    const current = articleRef.current;
+    const current = cardRef.current;
     if (current) observer.observe(current);
 
     return () => {
@@ -29,34 +27,42 @@ function Article(props) {
 
   return (
     <div
-      ref={articleRef}
-      className={`${styles.artigo} ${isVisible ? styles.visible : ''} col-md-3 mx-auto`}
+      ref={cardRef}
+      className={`${styles.artigo} ${isVisible ? styles.visible : ''}`}
     >
-      <h4>{props.title}</h4>
-      <p>{props.subtitle}</p>
-      <hr />
-      <br />
-      <p>{props.p}</p>
-      <ul>
-        <li>{props.item1}</li>
-        <li>{props.item2}</li>
-        <li>{props.item3}</li>
-        <li>{props.item4}</li>
+      {Icon && (
+        <div className={styles.iconWrap}>
+          <Icon size={22} strokeWidth={2} />
+        </div>
+      )}
+
+      <h4 className={styles.title}>{props.title}</h4>
+      <p className={styles.subtitle}>{props.subtitle}</p>
+
+      <ul className={styles.features}>
+        {[props.item1, props.item2, props.item3, props.item4]
+          .filter(Boolean)
+          .map((item, i) => (
+            <li key={i}>
+              <Check size={16} strokeWidth={3} className={styles.checkIcon} />
+              <span>{item}</span>
+            </li>
+          ))}
       </ul>
-      <div className="d-flex justify-content-center">
+
+      <div className={styles.ctaWrap}>
         <BtnComponent
-          to={`${props.toBtn}`}
-          textButton={`${props.textBtn}`}
-          textColor={`${props.textColorBtn}`}
-          borderColor={`${props.borderBtn}`}
-          backgroundColor={`${props.bgBtn}`}
+          to={props.toBtn}
+          textButton={props.textBtn}
+          textColor={props.textColorBtn}
+          borderColor={props.borderBtn}
+          backgroundColor={props.bgBtn}
         />
       </div>
-      <small
-        className={`text-muted mt-5 d-flex justify-content-center ${styles.smallText}`}
-      >
-        {props.smallText}
-      </small>
+
+      {props.smallText && (
+        <small className={styles.smallText}>{props.smallText}</small>
+      )}
     </div>
   );
 }

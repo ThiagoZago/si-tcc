@@ -1,31 +1,78 @@
-ul li {
-    list-style: none;
-}
-
 .artigo {
-    background-color: rgba(240, 240, 240, 0.5); /* Fundo branco para destacar a sombra */
-    border-radius: 8px; /* Borda levemente arredondada */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3); /* Sombra suave */
-    padding: 20px; /* Espaçamento interno */
-    margin: 5em 0; /* Espaçamento inferior entre artigos */
-    transition: transform 0.4s ease, opacity 1.5s ease, box-shadow 0.4s ease; /* Transição suave de transformação e opacidade */
-    opacity: 0; /* Inicialmente invisível */
-    transform: translateY(20px); /* Começa deslocado para baixo */
+    background-color: #fff;
+    border: 1px solid rgba(12, 12, 12, 0.08);
+    border-radius: 0.75em;
+    padding: 2.5rem 2rem;
+    transition: transform 0.4s ease, opacity 0.8s ease, box-shadow 0.4s ease;
+    opacity: 0;
+    transform: translateY(30px);
 }
 
-/* Efeito quando o artigo estiver sendo exibido */
 .artigo.visible {
-    opacity: 1; /* Torna o artigo visível */
-    transform: translateY(0); /* Desloca o artigo para sua posição normal */
-}
-  
-.artigo:hover {
-    transform: translateY(-5px); /* Eleva o artigo ao passar o mouse */
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.1); /* Aumenta a sombra */
+    opacity: 1;
+    transform: translateY(0);
 }
 
-.smallText{
-    color: #000;
-    font-weight: 600;
-    font-size: x-small;
+.artigo:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+.iconWrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 0.6em;
+    background-color: rgba(185, 22, 22, 0.1);
+    color: #b91616;
+    margin-bottom: 1.5rem;
+}
+
+.title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #0c0c0c;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    font-size: 0.95rem;
+    color: rgba(12, 12, 12, 0.55);
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem 0;
+}
+
+.features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.92rem;
+    color: rgba(12, 12, 12, 0.75);
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+}
+
+.checkIcon {
+    color: #b91616;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.ctaWrap {
+    margin-bottom: 1.25rem;
+}
+
+.smallText {
+    display: block;
+    color: rgba(12, 12, 12, 0.45);
+    font-size: 0.75rem;
+    text-align: center;
 }

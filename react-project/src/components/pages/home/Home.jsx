@@ -10,14 +10,16 @@ import { Link } from 'react-router-dom';
 import interiorBarbearia from '../../../img/interior_barbearia.jpg'
 import time_on_hand from '../../../img/sistema_agendamento_edited.jpg'
 
+import { Zap, Wallet, Smile } from 'lucide-react';
 
 
-function Home(){
 
-    return(
+function Home() {
+
+    return (
         <>
-            <Carousel/>
-            <RightContent 
+            <Carousel />
+            <RightContent
                 eyebrow="Parceria inteligente"
                 srcImg={interiorBarbearia}
                 altImg="Interior da barbearia"
@@ -29,66 +31,65 @@ function Home(){
             />
 
             <div className={`container ${styles.caixa}`}>
-                <div className="row column-gap-1">
-                    <Article 
-                        title="Artigo 1"
-                        subtitle="legenda doida"
-                        p="vantagem"
-                        item1="ABC"
-                        item2="WYZ"
-                        item3="TSZ"
+                <div className={styles.articlesGrid}>
+                    <Article
+                        icon={Zap}
+                        title="Praticidade"
+                        subtitle="Configure em minutos, sem complicação"
+                        item1="Cadastro rápido do seu negócio"
+                        item2="Agenda pronta em poucos cliques"
+                        item3="Sem curva de aprendizado"
 
                         toBtn="/acesso"
-                        textBtn="TESTE 1"
-                        textColorBtn={colors.black}
-                        borderBtn={colors.darkSoft}
-                        bgBtn="none"
+                        textBtn="COMEÇAR AGORA"
+                        textColorBtn="#fff"
+                        borderBtn="#b91616"
+                        bgBtn="#b91616"
 
                         smallText={<span>
-                                    Em caso de dúvidas, <Link style={{textDecoration:'none', color:'red'}} to='ajuda'>clique aqui</Link>
-                                </span>}
-                    />
-                    <Article 
-                        title="Artigo 2"
-                        subtitle="legenda maluca"
-                        p="desvantagem"
-                        item1="ABC"
-                        item2="WYZ"
-                        item3="TSZ"
-
-                        toBtn="/acesso"
-                        textBtn="TESTE 2"
-                        textColorBtn="#000"
-                        borderBtn="#2c2c2c"
-                        bgBtn="none"
-
-                        smallText={<span>
-                            Em caso de dúvidas, <Link style={{textDecoration:'none', color:'red'}} to='ajuda'>clique aqui</Link>
+                            Em caso de dúvidas, <Link style={{ textDecoration: 'none', color: '#b91616' }} to='ajuda'>clique aqui</Link>
                         </span>}
                     />
-                    <Article 
-                        title="Artigo 2"
-                        subtitle="legenda maluca"
-                        p="desvantagem"
-                        item1="ABC"
-                        item2="WYZ"
-                        item3="TSZ"
+                    <Article
+                        icon={Wallet}
+                        title="Controle financeiro"
+                        subtitle="Saiba exatamente quanto você fatura"
+                        item1="Histórico completo de atendimentos"
+                        item2="Visão clara da receita por período"
+                        item3="Menos tempo com planilhas"
 
                         toBtn="/acesso"
-                        textBtn="TESTE 2"
-                        textColorBtn="#000"
-                        borderBtn="#2c2c2c"
+                        textBtn="VER COMO FUNCIONA"
+                        textColorBtn="#0c0c0c"
+                        borderBtn="#0c0c0c"
                         bgBtn="none"
 
                         smallText={<span>
-                            Em caso de dúvidas, <Link style={{textDecoration:'none', color:'red'}} to='ajuda'>clique aqui</Link>
+                            Em caso de dúvidas, <Link style={{ textDecoration: 'none', color: '#b91616' }} to='ajuda'>clique aqui</Link>
                         </span>}
                     />
+                    <Article
+                        icon={Smile}
+                        title="Experiência do cliente"
+                        subtitle="Agendamento simples fideliza"
+                        item1="Cliente marca horário em segundos"
+                        item2="Lembretes automáticos, menos faltas"
+                        item3="Atendimento mais profissional"
 
+                        toBtn="/acesso"
+                        textBtn="EXPERIMENTAR"
+                        textColorBtn="#0c0c0c"
+                        borderBtn="#0c0c0c"
+                        bgBtn="none"
+
+                        smallText={<span>
+                            Em caso de dúvidas, <Link style={{ textDecoration: 'none', color: '#b91616' }} to='ajuda'>clique aqui</Link>
+                        </span>}
+                    />
                 </div>
             </div>
 
-            <LeftContent 
+            <LeftContent
                 eyebrow="Praticidade total"
                 srcImg={time_on_hand}
                 altImg="Sistema de agendamento no celular"

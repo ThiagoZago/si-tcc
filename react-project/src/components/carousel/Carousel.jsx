@@ -1,82 +1,85 @@
 import styles from './Carousel.module.css'
+import { ChevronLeft, ChevronRight, ArrowRight, MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-import BtnComponent from '../BtnComponent';
-import { useState } from 'react';
 import { colors } from '../../theme';
 
 
 function Carousel() {
 
-    const [isHoveredPrev, setIsHoveredPrev] = useState(false);
-    const [isHoveredNext, setIsHoveredNext] = useState(false);
-
     const gradient = {
         backgroundImage: `linear-gradient(${colors.black}, ${colors.red})`,
     }
-    const capa = {
-        textAlign: 'center',
-    };
-    const carouselControlNext = {
-        width: '5vh',
-        textDecoration: 'none',
-        transition: 'transform 0.5s, opacity 0.5s',
-        transform: isHoveredNext ? 'scale(1.3)' : 'scale(1)',
-        opacity: isHoveredNext ? '0.3' : '1',
-    };
-    const carouselControlPrev = {
-        width: '5vh',
-        textDecoration: 'none',
-        transition: 'transform 0.5s, opacity 0.5s',
-        transform: isHoveredPrev ? 'scale(1.3)' : 'scale(1)',
-        opacity: isHoveredPrev ? '0.3' : '1',
-    };
 
-    return(
+    return (
 
-        <section style={gradient} id="home" className="d-flex">
-            <div className="container align-self-center">
-                <div className="row">
-                    <div style={capa} className="col-md-12">
-                        <div id="carousel-spotify" className="carousel slide" data-bs-ride="carousel">
-                            <div className="carousel-inner">
-                                <div className="carousel-item active">
-                                    <h1 className={styles.text}>Quer marcar um horário?</h1>
-                                    <BtnComponent
-                                        to='/agendar'
-                                        textButton='pelo whatsapp'
-                                        textColor={colors.white}
-                                        borderColor='rgba(255,255,255,0.5)'
-                                        backgroundColor={colors.darkSoft}
-                                    />
-                                    <BtnComponent
-                                        to='/agendar'
-                                        textButton='pelo site'
-                                        textColor={colors.black}
-                                        borderColor={colors.darkSoft}
-                                        backgroundColor='rgba(255,255,255,0.9)'
-                                    />
-                                </div>
-                
-                                <div className="carousel-item">
-                                    <h1 className={styles.text}>Seja nosso parceiro!</h1>
-                                    <BtnComponent
-                                        to='/acesso'
-                                        textButton='VAMOS NESSA!'
-                                        textColor={colors.white}
-                                        borderColor={colors.darkSoft}
-                                        backgroundColor={colors.black}
-                                    />
+        <section style={gradient} id="home" className={`d-flex ${styles.caixa}`}>
+            <div className="container">
+                <div className={styles.wrapper}>
+                    <div id="carousel-spotify" className="carousel slide" data-bs-ride="carousel">
+                        <div className="carousel-inner">
+                            <div className="carousel-item active">
+                                <span className={styles.eyebrow}>
+                                    <span className={styles.dash}></span>
+                                    AGENDAMENTO ONLINE
+                                </span>
+                                <h1 className={styles.text}>Quer marcar<br />um horário?</h1>
+                                <p className={styles.subtitle}>
+                                    Escolha o profissional, o serviço e o melhor horário para você.
+                                </p>
+                                <div className={styles.btnGroup}>
+                                    <Link to='/agendar' className={styles.btnPrimary}>
+                                        Agendar pelo site <ArrowRight size={18} strokeWidth={2.5} />
+                                    </Link>
+                                    <Link to='/agendar' className={styles.btnGhost}>
+                                        <MessageCircle size={18} strokeWidth={2.2} /> Pelo WhatsApp
+                                    </Link>
                                 </div>
                             </div>
-                            <Link style={carouselControlPrev} onMouseEnter={() => setIsHoveredPrev(true)} onMouseLeave={() => setIsHoveredPrev(false)} data-bs-target="#carousel-spotify" className="carousel-control-prev" data-bs-slide="prev"><i className="fas fa-angle-left fa-3x"></i></Link>
-                            <Link style={carouselControlNext} onMouseEnter={() => setIsHoveredNext(true)} onMouseLeave={() => setIsHoveredNext(false)} data-bs-target="#carousel-spotify" className="carousel-control-next" data-bs-slide="next"><i className="fas fa-angle-right fa-3x"></i></Link>
+
+                            <div className="carousel-item">
+                                <span className={styles.eyebrow}>
+                                    <span className={styles.dash}></span>
+                                    PARA DONOS DE BARBEARIA
+                                </span>
+                                <h1 className={styles.text}>Seja nosso<br />parceiro!</h1>
+                                <p className={styles.subtitle}>
+                                    Gerencie sua agenda, seus profissionais e seus clientes em um só lugar.
+                                </p>
+                                <div className={styles.btnGroup}>
+                                    <div className={styles.btnGroup}>
+                                        <Link to='/acesso' className={styles.btnPrimary}>
+                                            Vamos nessa <ArrowRight size={18} strokeWidth={2.5} />
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
+                        <button
+                            type="button"
+                            data-bs-target="#carousel-spotify"
+                            data-bs-slide="prev"
+                            className={`${styles.navBtn} ${styles.navPrev}`}
+                            aria-label="Anterior"
+                        >
+                            <ChevronLeft size={22} strokeWidth={2.5} />
+                        </button>
+                        <button
+                            type="button"
+                            data-bs-target="#carousel-spotify"
+                            data-bs-slide="next"
+                            className={`${styles.navBtn} ${styles.navNext}`}
+                            aria-label="Próximo"
+                        >
+                            <ChevronRight size={22} strokeWidth={2.5} />
+                        </button>
+
+
                     </div>
                 </div>
             </div>
         </section>
-  );
+    );
 }
 
-export default Carousel
+export default Carousel;
