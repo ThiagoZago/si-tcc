@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useNavigate, Link } from "react-router-dom"
+import { Eye, EyeOff, ArrowRight } from "lucide-react"
 import { login } from "../../../services/authService"
 import styles from "./Access.module.css"
 
@@ -45,55 +46,81 @@ function Access() {
   }
 
   return (
-    <div className={`${styles.gradiente} d-flex justify-content-center align-items-center vh-100`}>
-      <div className={`${styles.card} col-4 card p-4 shadow`}>
-        <h2 className="text-center mb-4">Acesse já</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3 form-floating">
-            <input
-              id="floatingEmail"
-              type="email"
-              placeholder="Email"
-              className="form-control"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              autoComplete="email"
-            />
-            <label htmlFor="floatingEmail">Email</label>
-          </div>
-          <div className="mb-3">
-            <div className="input-group form-floating">
-              <input
-                id="floatingPassword"
-                type={showPassword ? "text" : "password"}
-                placeholder="Senha"
-                className="form-control"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                autoComplete="current-password"
-              />
-              <label htmlFor="floatingPassword">Senha</label>
-              <button
-                type="button"
-                className="btn btn-outline-secondary"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? "Ocultar" : "Mostrar"}
-              </button>
-            </div>
-            {showPassword && <small className="text-muted">A senha será ocultada automaticamente em 3 segundos</small>}
-          </div>
-          <button type="submit" className="btn btn-dark w-100">
-            Entrar
-          </button>
-        </form>
+    <div className={styles.page}>
+      <div className={styles.card}>
+        <aside className={styles.brand}>
+          <span className={styles.eyebrow}>
+            <span className={styles.dash}></span>
+            ÁREA DE ACESSO
+          </span>
+          <h2 className={styles.brandTitle}>
+            Sua agenda,
+            <br />
+            <span className={styles.brandAccent}>sempre à mão.</span>
+          </h2>
+          <p className={styles.brandText}>
+            Entre para gerenciar horários, serviços e atendimentos em um só lugar.
+          </p>
+        </aside>
 
-        <div className="mt-5">
-          <p className="text-center">Ainda não tem uma conta?</p>
-          <Link to="/registro" className="btn btn-danger w-100">
-            Criar Conta
-          </Link>
+        <div className={styles.formPanel}>
+          <h2 className={styles.formTitle}>Acesse já</h2>
+          <p className={styles.formSubtitle}>Entre com seu email e senha.</p>
+
+          <form onSubmit={handleSubmit}>
+            <div className={styles.field}>
+              <label htmlFor="floatingEmail" className={styles.label}>Email</label>
+              <input
+                id="floatingEmail"
+                type="email"
+                placeholder="seu@email.com"
+                className={styles.input}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+                autoComplete="email"
+              />
+            </div>
+
+            <div className={styles.field}>
+              <label htmlFor="floatingPassword" className={styles.label}>Senha</label>
+              <div className={styles.passwordWrap}>
+                <input
+                  id="floatingPassword"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Sua senha"
+                  className={`${styles.input} ${styles.inputPassword}`}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                />
+                <button
+                  type="button"
+                  className={styles.toggle}
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+              {showPassword && (
+                <small className={styles.hint}>
+                  A senha será ocultada automaticamente em 3 segundos
+                </small>
+              )}
+            </div>
+
+            <button type="submit" className={styles.submit}>
+              Entrar <ArrowRight size={18} strokeWidth={2.5} />
+            </button>
+          </form>
+
+          <div className={styles.registerBox}>
+            <p className={styles.registerText}>Ainda não tem uma conta?</p>
+            <Link to="/registro" className={styles.registerLink}>
+              Criar conta
+            </Link>
+          </div>
         </div>
       </div>
 
