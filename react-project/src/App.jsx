@@ -7,9 +7,9 @@ import Footer from './components/layout/Footer/Footer';
 import Container from './components/layout/Container/Container'
 
 import Home from './components/pages/home/Home';
-import About from './components/pages/About';
+import About from './components/pages/about/About';
 import Help from './components/pages/help/Help';
-import Schedule from './components/pages/Schedule';
+import Schedule from './components/pages/schedule/Schedule';
 import Access from './components/pages/access/Access';
 import News from './components/pages/News';
 import Developers from './components/pages/Developers';
