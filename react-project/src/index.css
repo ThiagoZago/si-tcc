@@ -9,12 +9,11 @@
 
 :root {
   /* Cores de marca */
-  --color-primary: #b91616;
-  --color-primary-dark: #8a1010;
-  --color-dark: #000;
+  --color-black: #000;
   --color-dark-soft: #2c2c2c;
+  --color-red: #b91616;
+  --color-red-dark: #5f0b0b;
   --color-gray: #919496;
-  --color-light: #f0f0f0;
   --color-white: #fff;
 
   /* Cores de fundo (com transparência) */
