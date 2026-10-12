@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { Plus } from "lucide-react"
 import styles from "./Help.module.css"
 
@@ -21,6 +22,9 @@ const faqs = [
 ]
 
 function Help() {
+
+  const [openFaq, setOpenFaq] = useState(null)
+  
   return (
     <section className={styles.section}>
       <div className="container">
@@ -43,16 +47,18 @@ function Help() {
           <div className={styles.accordion} id="helpAccordion">
             {faqs.map((faq, index) => {
               const id = `help-collapse-${index}`
+              const isOpen = openFaq === index
               return (
                 <div className={styles.item} key={id}>
                   <h3 className={styles.itemHeader}>
                     <button
-                      className={`${styles.button} collapsed`}
+                      className={`${styles.button} ${isOpen ? "" : "collapsed"}`}
                       type="button"
-                      data-bs-toggle="collapse"
-                      data-bs-target={`#${id}`}
-                      aria-expanded="false"
+                      aria-expanded={isOpen}
                       aria-controls={id}
+                      onClick={() =>
+                        setOpenFaq(isOpen ? null : index)
+                      }
                     >
                       <span className={styles.number}>
                         {String(index + 1).padStart(2, "0")}
@@ -61,7 +67,7 @@ function Help() {
                       <Plus className={styles.icon} size={20} strokeWidth={2.5} />
                     </button>
                   </h3>
-                  <div id={id} className="collapse" data-bs-parent="#helpAccordion">
+                  <div id={id} className={`collapse ${isOpen ? "show" : ""}`}>
                     <div className={styles.body}>{faq.answer}</div>
                   </div>
                 </div>
