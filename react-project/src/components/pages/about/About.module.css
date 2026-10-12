@@ -1,0 +1,340 @@
+.hero,
+.section,
+.cta {
+    width: 100%;
+    align-self: stretch;
+}
+
+/* ---- Botões (hero e CTA) ---- */
+.btnPrimary,
+.btnGhost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.9rem 1.8rem;
+    border-radius: 100px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.3s ease, color 0.3s ease,
+                border-color 0.3s ease, gap 0.3s ease;
+}
+
+.btnPrimary {
+    background: #fff;
+    color: #0c0c0c;
+    border: 1px solid #fff;
+}
+
+.btnPrimary:hover {
+    background: #0c0c0c;
+    color: #fff;
+    border-color: #0c0c0c;
+    gap: 0.9rem;
+}
+
+.btnGhost {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+.btnGhost:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: #fff;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* ---- Eyebrow (versão clara, sobre gradiente) ---- */
+.eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 1.25rem;
+}
+
+.dash {
+    display: inline-block;
+    width: 24px;
+    height: 2px;
+    background-color: #fff;
+}
+
+/* ---- Eyebrow (versão escura, sobre fundo branco) ---- */
+.eyebrowDark {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #b91616;
+    margin-bottom: 1.25rem;
+}
+
+.dashDark {
+    display: inline-block;
+    width: 24px;
+    height: 2px;
+    background-color: #b91616;
+}
+
+/* ---- Hero ---- */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 5rem 0;
+    background: linear-gradient(180deg, #0c0c0c 0%, #b91616 100%);
+}
+
+.heroInner {
+    max-width: 760px;
+}
+
+.heroTitle {
+    font-size: clamp(2.4rem, 5vw, 4.2rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin-bottom: 1.5rem;
+}
+
+.accent {
+    opacity: 0.55;
+}
+
+.heroText {
+    max-width: 560px;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.78);
+    margin-bottom: 2rem;
+}
+
+/* ---- Seções claras ---- */
+.section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 6rem 0;
+    background: #fff;
+}
+
+.sectionAlt {
+    background: #f6f6f6;
+}
+
+.split {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: 4rem;
+    align-items: start;
+}
+
+.title {
+    font-size: clamp(1.9rem, 3.2vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: #0c0c0c;
+    margin: 0;
+}
+
+.titleSpaced {
+    margin-bottom: 3rem;
+}
+
+.titleAccent {
+    color: #b91616;
+}
+
+.text {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: rgba(12, 12, 12, 0.7);
+    margin-bottom: 1.25rem;
+}
+
+/* ---- Lista de recursos ---- */
+.featureList {
+    list-style: none;
+    margin: 1.75rem 0 0;
+    padding: 0;
+}
+
+.featureList li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.9rem;
+    font-size: 1rem;
+    color: rgba(12, 12, 12, 0.8);
+    line-height: 1.5;
+}
+
+.check {
+    flex-shrink: 0;
+    margin-top: 3px;
+    color: #b91616;
+}
+
+/* ---- Valores ---- */
+.valuesGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-top: 4rem;
+}
+
+.valueCard {
+    background: #fff;
+    border: 1px solid rgba(12, 12, 12, 0.08);
+    border-radius: 0.75em;
+    padding: 2rem 1.5rem;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.valueCard:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+.iconWrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 0.6em;
+    background: rgba(185, 22, 22, 0.1);
+    color: #b91616;
+    margin-bottom: 1.25rem;
+}
+
+.valueTitle {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #0c0c0c;
+    margin-bottom: 0.5rem;
+}
+
+.valueText {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: rgba(12, 12, 12, 0.6);
+    margin: 0;
+}
+
+/* ---- Etapas ---- */
+.steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+}
+
+.step {
+    padding-top: 1.5rem;
+    border-top: 2px solid rgba(12, 12, 12, 0.1);
+    transition: border-color 0.3s ease;
+}
+
+.step:hover {
+    border-color: #b91616;
+}
+
+.stepNumber {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #b91616;
+    margin-bottom: 0.9rem;
+}
+
+.stepTitle {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #0c0c0c;
+    margin-bottom: 0.5rem;
+}
+
+.stepText {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: rgba(12, 12, 12, 0.6);
+    margin: 0;
+}
+
+/* ---- CTA final (termina no preto do Footer) ---- */
+.cta {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 6rem 0;
+    background: linear-gradient(180deg, #b91616 0%, #0c0c0c 100%);
+}
+
+.ctaInner {
+    max-width: 760px;
+}
+
+.ctaTitle {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: #fff;
+    margin-bottom: 1.25rem;
+}
+
+
+.valueCard {
+    height: 100%;
+    background: #fff;
+    border: 1px solid rgba(12, 12, 12, 0.08);
+    border-radius: 0.75em;
+    padding: 2rem 1.5rem;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* ---- Responsivo ---- */
+@media (max-width: 992px) {
+    .valuesGrid,
+    .steps {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 860px) {
+    .split {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .section,
+    .cta {
+        padding: 4rem 0;
+    }
+}
+
+@media (max-width: 560px) {
+    .valuesGrid,
+    .steps {
+        grid-template-columns: 1fr;
+    }
+}
