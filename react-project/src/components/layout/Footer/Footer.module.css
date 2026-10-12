@@ -11,3 +11,7 @@
     border: solid 0.1em rgba(255, 0, 0, 0.7);
     background-color: #b91616;
 }
+
+.smallText{
+    color:#6d6d6d;
+}
