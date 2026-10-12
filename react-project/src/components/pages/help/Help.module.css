@@ -1,5 +1,7 @@
 .section {
-  min-height: 85vh;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
   background-color: #fff;
   padding: 5rem 0;
 }
