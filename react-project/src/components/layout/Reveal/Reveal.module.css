@@ -1,0 +1,25 @@
+.hidden {
+  opacity: 0;
+  transform: translateY(60px);
+}
+
+.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.9s ease-out, transform 0.9s ease-out;
+}
+
+/* faz o wrapper ocupar a altura da célula do grid (cards de mesma altura) */
+.fill {
+  height: 100%;
+}
+
+/* respeita quem desativa animações no sistema */
+@media (prefers-reduced-motion: reduce) {
+  .hidden,
+  .visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
