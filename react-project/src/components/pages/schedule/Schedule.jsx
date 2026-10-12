@@ -1,0 +1,538 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from "react";
+import axiosInstance from "../../../utils/axiosInterceptor"
+import DatePicker from "react-datepicker";
+import { format, parse } from "date-fns";
+import "react-datepicker/dist/react-datepicker.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Calendar, MapPin, X, ArrowRight, Info, AlertCircle } from "lucide-react";
+
+import { padronizarTelefone } from "../../../services/phoneNumber";
+import BusinessSearch from "../../BusinessSearch";
+import styles from "./Schedule.module.css";
+
+function Schedule() {
+  const [formData, setFormData] = useState({
+    nome: "",
+    telefone: "",
+    businessId: "",
+    businessName: "",
+    businessAddress: "",
+    professionalId: "",
+    serviceId: "",
+    data: "",
+    hora: "",
+  });
+
+  const [mensagem, setMensagem] = useState("");
+  const [livres, setLivres] = useState([]);
+  const [professionals, setProfessionals] = useState([]);
+  const [services, setServices] = useState([]);
+  const [availableDays, setAvailableDays] = useState([]);
+
+  const [slotsLoading, setSlotsLoading] = useState(false);
+  const [slotsError, setSlotsError] = useState("");
+
+
+
+// 1️⃣ Quando escolher o local → buscar apenas profissionais
+  useEffect(() => {
+    const { businessId } = formData;
+
+    // Reset dependentes
+    setFormData(prev => ({
+      ...prev,
+      professionalId: "",
+      serviceId: "",
+      data: "",
+      hora: "",
+    }));
+    setProfessionals([]);
+    setServices([]);
+    setAvailableDays([]);
+    setLivres([]);
+    setSlotsError("");
+
+    if (!businessId) return;
+
+    const fetchProfessionals = async () => {
+      try {
+        const res = await axiosInstance.get(`/businessSchedule/${businessId}/professionals`);
+        setProfessionals(res.data);
+      } catch (err) {
+        console.error("Erro ao carregar profissionais:", err);
+        setProfessionals([]);
+      }
+    };
+
+    fetchProfessionals();
+  }, [formData.businessId]);
+
+
+  // 2️⃣ Quando escolher o profissional → buscar apenas serviços dele
+  useEffect(() => {
+    const { businessId, professionalId } = formData;
+
+    // Reset dependentes
+    setFormData(prev => ({
+      ...prev,
+      serviceId: "",
+      data: "",
+      hora: "",
+    }));
+    setServices([]);
+    setAvailableDays([]);
+    setLivres([]);
+    setSlotsError("");
+
+    if (!businessId || !professionalId) return;
+
+    const fetchServices = async () => {
+      try {
+        const res = await axiosInstance.get(
+          `/businessSchedule/${businessId}/services`,
+          { params: { professionalId } } // 🔹 passa o profId no backend
+        );
+        setServices(res.data);
+      } catch (err) {
+        console.error("Erro ao carregar serviços:", err);
+        setServices([]);
+      }
+    };
+
+    fetchServices();
+  }, [formData.professionalId]);
+
+  const { businessId, professionalId, serviceId, data } = formData;
+
+  useEffect(() => {
+    
+    if (!businessId || !professionalId || !serviceId) {
+      setAvailableDays([]);
+      return;
+    }
+
+    let cancelled = false;
+    const fetchDays = async () => {
+      try {
+        const resp = await axiosInstance.get(
+          `/businessSchedule/${businessId}/days`,
+          { params: { professionalId, serviceId } }
+        );
+        if (!cancelled) setAvailableDays(resp.data || []);
+      } catch (err) {
+        console.error("Erro ao carregar dias disponíveis:", err);
+        if (!cancelled) setAvailableDays([]);
+      }
+    };
+
+    fetchDays();
+    return () => { cancelled = true; };
+  }, [businessId, professionalId, serviceId, services, professionals]);
+
+  // Buscar horários livres
+  useEffect(() => {
+    if (!businessId || !professionalId || !serviceId || !data) {
+      setLivres([]);
+      setSlotsError("");
+      setSlotsLoading(false);
+      return;
+    }
+
+    let cancelled = false;
+    const fetchSlots = async () => {
+      setSlotsLoading(true);
+      setSlotsError("");
+      setLivres([]);
+
+      try {
+        const resp = await axiosInstance.get(
+          `/businessSchedule/${businessId}/slots`,
+          { params: { professionalId, serviceId, date: data }, timeout: 8000 }
+        );
+        if (!cancelled) {
+          setLivres(Array.isArray(resp.data) ? resp.data : []);
+        }
+      } catch (err) {
+        console.error("Erro ao carregar horários disponíveis:", err);
+        if (!cancelled) {
+          const msg =
+            err.response?.data?.msg ||
+            err.response?.data ||
+            err.message ||
+            "Erro ao carregar horários";
+          setSlotsError(String(msg));
+          setLivres([]);
+        }
+      } finally {
+        if (!cancelled) setSlotsLoading(false);
+      }
+    };
+
+    fetchSlots();
+    return () => {
+      cancelled = true;
+    };
+  }, [businessId, professionalId, serviceId, data]);
+
+  // alterações no form
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev, [name]: value, 
+    }));
+  };
+
+  const handleHoraSelect = (hora) => {
+    setFormData(prev => ({ ...prev, hora }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const telefonePadronizado = padronizarTelefone(formData.telefone || "");
+      const requestData = { ...formData, telefone: telefonePadronizado };
+
+      const response = await axiosInstance.post("/agendar", requestData);
+      toast.success(response.data?.msg || "Agendamento realizado!");
+      setFormData({
+        nome: "",
+        telefone: "",
+        businessId: "",
+        businessName: "",
+        businessAddress: "",
+        professionalId: "",
+        serviceId: "",
+        data: "",
+        hora: "",
+      });
+      setProfessionals([]);
+      setServices([]);
+      setLivres([]);
+      setAvailableDays([]);
+    } catch (error) {
+      console.error("Erro ao agendar:", error);
+      const errMsg =
+        error.response?.data?.msg ||
+        error.response?.data?.message ||
+        error.message ||
+        "Erro ao realizar o agendamento.";
+      toast.error(errMsg);
+    }
+
+    setTimeout(() => setMensagem(""), 5000);
+  };
+
+  const CustomInput = React.forwardRef(({ value, onClick, placeholder }, ref) => (
+    <div className={styles.dateField}>
+      <input
+        type="text"
+        className={styles.input}
+        onClick={onClick}
+        ref={ref}
+        value={value}
+        placeholder={placeholder}
+        readOnly
+      />
+      <button
+        className={styles.dateBtn}
+        type="button"
+        onClick={onClick}
+        aria-label="Abrir calendário"
+      >
+        <Calendar size={20} />
+      </button>
+    </div>
+  ));
+  CustomInput.displayName = "CustomInput";
+
+  const handleDateSelect = (date) => {
+    if (!date) {
+      setFormData(prev => ({ ...prev, data: "", hora: "" }));
+      return;
+    }
+    const formatted = format(date, "yyyy-MM-dd");
+    setFormData(prev => ({ ...prev, data: formatted, hora: "" }));
+  };
+
+  const isDateAvailable = (date) => {
+    const str = format(date, "yyyy-MM-dd");
+    const dia = availableDays.find(d => d.date === str);
+    return dia ? dia.available : false;
+  };
+
+  
+  const selectedDate = formData.data
+    ? parse(formData.data, "yyyy-MM-dd", new Date())
+    : null;
+
+  // Apenas para o resumo visual (não altera a lógica)
+  const selectedProfessional = professionals.find((p) => p._id?.$oid === formData.professionalId);
+  const selectedService = services.find((s) => s._id?.$oid === formData.serviceId);
+  
+
+  return (
+    <section className={styles.page}>
+      <div className={styles.card}>
+        <aside className={styles.brand}>
+          <div className={styles.brandInner}>
+            <span className={styles.eyebrow}>
+              <span className={styles.dash}></span>
+              AGENDAMENTO
+            </span>
+            <h2 className={styles.brandTitle}>
+              Escolha seu
+              <br />
+              <span className={styles.brandAccent}>melhor horário.</span>
+            </h2>
+            <p className={styles.brandText}>
+              Selecione o local, o profissional e o serviço. O resto a gente organiza.
+            </p>
+
+            <ul className={styles.summary}>
+              <li>
+                <span>Local</span>
+                <strong>{formData.businessName || "—"}</strong>
+              </li>
+              <li>
+                <span>Profissional</span>
+                <strong>{selectedProfessional?.name || "—"}</strong>
+              </li>
+              <li>
+                <span>Serviço</span>
+                <strong>{selectedService?.name || "—"}</strong>
+              </li>
+              <li>
+                <span>Data</span>
+                <strong>{selectedDate ? format(selectedDate, "dd/MM/yyyy") : "—"}</strong>
+              </li>
+              <li>
+                <span>Horário</span>
+                <strong>{formData.hora || "—"}</strong>
+              </li>
+            </ul>
+          </div>
+        </aside>
+
+        <div className={styles.formPanel}>
+          <h2 className={styles.formTitle}>Agendar horário</h2>
+          <p className={styles.formSubtitle}>Preencha os dados abaixo para reservar.</p>
+
+          <form onSubmit={handleSubmit}>
+            {/* Dados pessoais */}
+            <div className={styles.step}>
+              <div className={styles.stepHeader}>
+                <span className={styles.stepNumber}>01</span>
+                <h5 className={styles.stepTitle}>Dados pessoais</h5>
+              </div>
+
+              <div className={styles.field}>
+                <label htmlFor="nome" className={styles.label}>Nome</label>
+                <input
+                  type="text"
+                  className={styles.input}
+                  id="nome"
+                  name="nome"
+                  value={formData.nome}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className={styles.field}>
+                <label htmlFor="telefone" className={styles.label}>Telefone</label>
+                <input
+                  type="tel"
+                  className={styles.input}
+                  id="telefone"
+                  name="telefone"
+                  value={formData.telefone}
+                  pattern="^[0-9]{9,11}$"
+                  onChange={handleChange}
+                  required
+                />
+                <small className={styles.hint}>Somente números, com DDD.</small>
+              </div>
+            </div>
+
+            {/* Local e serviço */}
+            <div className={styles.step}>
+              <div className={styles.stepHeader}>
+                <span className={styles.stepNumber}>02</span>
+                <h5 className={styles.stepTitle}>Local e serviço</h5>
+              </div>
+
+              <div className={styles.field}>
+                <label className={styles.label}>Local</label>
+                <BusinessSearch
+                  onSelect={(b) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      businessId: b.id,
+                      businessName: b.name,
+                      businessAddress: b.address,
+                    }))
+                  }
+                />
+              </div>
+
+              {formData.businessId && (
+                <div className={styles.selectedBusiness}>
+                  <MapPin size={20} className={styles.selectedIcon} />
+                  <div className={styles.selectedInfo}>
+                    <strong>{formData.businessName}</strong>
+                    <small>{formData.businessAddress}</small>
+                  </div>
+                  <button
+                    type="button"
+                    className={styles.removeBtn}
+                    aria-label="Remover"
+                    onClick={() => setFormData(prev => ({
+                      ...prev,
+                      businessId: "",
+                      businessName: "",
+                      businessAddress: ""
+                    }))}
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+              )}
+
+              <div className={styles.field}>
+                <label htmlFor="professional" className={styles.label}>Profissional</label>
+                <select
+                  className={styles.select}
+                  id="professional"
+                  name="professionalId"
+                  value={formData.professionalId}
+                  onChange={handleChange}
+                  required
+                  disabled={!professionals.length}
+                >
+                  <option value="">Selecione um profissional</option>
+                  {professionals.map((p) => (
+                    <option key={p._id.$oid} value={p._id.$oid}>{p.name} - {p.role}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className={styles.field}>
+                <label htmlFor="service" className={styles.label}>Serviço</label>
+                <select
+                  className={styles.select}
+                  id="service"
+                  name="serviceId"
+                  value={formData.serviceId}
+                  onChange={handleChange}
+                  required
+                  disabled={!services.length}
+                >
+                  <option value="">Selecione um serviço</option>
+                  {services.map((s) => (
+                    <option key={s._id.$oid} value={s._id.$oid}>{s.name} ({s.duration})</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Agendamento */}
+            <div className={styles.step}>
+              <div className={styles.stepHeader}>
+                <span className={styles.stepNumber}>03</span>
+                <h5 className={styles.stepTitle}>Data e horário</h5>
+              </div>
+
+              <div className={styles.field}>
+                <label className={styles.label}>Data</label>
+                <div className={styles.dateScope}>
+                  <DatePicker
+                    selected={selectedDate}
+                    onChange={handleDateSelect}
+                    dateFormat="yyyy-MM-dd"
+                    customInput={<CustomInput placeholder="Selecione uma data" />}
+                    filterDate={isDateAvailable}
+                    minDate={new Date()}
+                  />
+                </div>
+              </div>
+
+              <div className={styles.field}>
+                <label className={styles.label}>Horários disponíveis</label>
+
+                {/* Mensagem inicial enquanto não há dados suficientes */}
+                {!businessId || !professionalId || !serviceId || !data ? (
+                  <div className={styles.notice}>
+                    <Info size={18} />
+                    <span>Preencha o local, profissional, serviço e data para ver os horários disponíveis.</span>
+                  </div>
+                ) : (
+                  <>
+                    {slotsLoading && (
+                      <div className={styles.loading}>
+                        <span className={styles.spinner}></span>
+                        <span>Carregando horários...</span>
+                      </div>
+                    )}
+
+                    {slotsError && !slotsLoading && (
+                      <div className={`${styles.notice} ${styles.noticeError}`}>
+                        <AlertCircle size={18} />
+                        <span>{slotsError}</span>
+                      </div>
+                    )}
+
+                    <div className={styles.slots}>
+                      {livres.map((hora, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          className={`${styles.slot} ${formData.hora === hora ? styles.slotActive : ""}`}
+                          onClick={() => handleHoraSelect(hora)}
+                        >
+                          {hora}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Caso não existam horários livres */}
+                    {livres.length === 0 && !slotsLoading && !slotsError && (
+                      <div className={styles.notice}>
+                        <Info size={18} />
+                        <span>Nenhum horário disponível para esta data.</span>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
+
+            <button type="submit" className={styles.submit} disabled={!formData.hora}>
+              Agendar <ArrowRight size={18} strokeWidth={2.5} />
+            </button>
+          </form>
+
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            pauseOnHover
+            draggable
+          />
+
+          {mensagem && (
+            <div className="alert alert-info alert-dismissible fade show mt-3" role="alert">
+              {mensagem}
+              <button type="button" className="btn-close" onClick={() => setMensagem("")}></button>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default Schedule;

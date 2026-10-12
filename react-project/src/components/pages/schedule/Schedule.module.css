@@ -1,0 +1,430 @@
+.page {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 3rem 1rem;
+    background-color: #f4f4f4;
+}
+
+/* ---- Card dividido ---- */
+/* sem overflow:hidden de propósito, para o position:sticky do resumo funcionar */
+.card {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    width: 100%;
+    max-width: 1040px;
+    background: #fff;
+    border-radius: 1em;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+}
+
+/* ---- Lado da marca ---- */
+.brand {
+    padding: 3.5rem 2.75rem;
+    background: linear-gradient(160deg, #b91616 0%, #0c0c0c 100%);
+    color: #fff;
+    border-radius: 1em 0 0 1em;
+}
+
+.brandInner {
+    position: sticky;
+    top: 2rem;
+}
+
+.eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+}
+
+.dash {
+    display: inline-block;
+    width: 24px;
+    height: 2px;
+    background-color: #fff;
+}
+
+.brandTitle {
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.25rem;
+}
+
+.brandAccent {
+    opacity: 0.55;
+}
+
+.brandText {
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* ---- Resumo ---- */
+.summary {
+    list-style: none;
+    margin: 2.25rem 0 0;
+    padding: 1.25rem 0 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.summary li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 0.9rem;
+}
+
+.summary span {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.summary strong {
+    text-align: right;
+    font-weight: 700;
+}
+
+/* ---- Lado do formulário ---- */
+.formPanel {
+    padding: 3rem 3rem 3.5rem;
+}
+
+.formTitle {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #0c0c0c;
+    margin-bottom: 0.4rem;
+}
+
+.formSubtitle {
+    color: rgba(12, 12, 12, 0.55);
+    font-size: 0.95rem;
+    margin-bottom: 2.25rem;
+}
+
+/* ---- Etapas ---- */
+.step {
+    margin-bottom: 2.25rem;
+}
+
+.stepHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid rgba(12, 12, 12, 0.08);
+}
+
+.stepNumber {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #b91616;
+}
+
+.stepTitle {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #0c0c0c;
+}
+
+/* ---- Campos ---- */
+.field {
+    margin-bottom: 1.25rem;
+}
+
+.label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(12, 12, 12, 0.7);
+    margin-bottom: 0.5rem;
+}
+
+.input,
+.select {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    font-size: 1rem;
+    color: #0c0c0c;
+    background: #fff;
+    border: 1px solid rgba(12, 12, 12, 0.15);
+    border-radius: 0.5em;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input:focus,
+.select:focus {
+    border-color: #b91616;
+    box-shadow: 0 0 0 3px rgba(185, 22, 22, 0.12);
+}
+
+.input:disabled,
+.select:disabled {
+    background: #f6f6f6;
+    color: rgba(12, 12, 12, 0.4);
+    cursor: not-allowed;
+}
+
+.hint {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: rgba(12, 12, 12, 0.5);
+}
+
+/* ---- Local selecionado ---- */
+.selectedBusiness {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 1rem 1.1rem;
+    margin-bottom: 1.25rem;
+    border: 1px solid rgba(185, 22, 22, 0.25);
+    background: rgba(185, 22, 22, 0.06);
+    border-radius: 0.5em;
+}
+
+.selectedIcon {
+    flex-shrink: 0;
+    color: #b91616;
+}
+
+.selectedInfo {
+    flex: 1;
+    min-width: 0;
+}
+
+.selectedInfo strong {
+    display: block;
+    color: #0c0c0c;
+    font-size: 0.95rem;
+}
+
+.selectedInfo small {
+    color: rgba(12, 12, 12, 0.6);
+    font-size: 0.8rem;
+}
+
+.removeBtn {
+    display: flex;
+    align-items: center;
+    padding: 0.4rem;
+    background: none;
+    border: none;
+    color: rgba(12, 12, 12, 0.5);
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.removeBtn:hover {
+    color: #b91616;
+}
+
+/* ---- Data ---- */
+.dateField {
+    position: relative;
+}
+
+.dateField .input {
+    padding-right: 3rem;
+    cursor: pointer;
+}
+
+.dateBtn {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    background: none;
+    border: none;
+    color: rgba(12, 12, 12, 0.5);
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.dateBtn:hover {
+    color: #b91616;
+}
+
+/* tema do react-datepicker */
+.dateScope :global(.react-datepicker-wrapper) {
+    display: block;
+    width: 100%;
+}
+
+.dateScope :global(.react-datepicker) {
+    font-family: inherit;
+    border: 1px solid rgba(12, 12, 12, 0.1);
+    border-radius: 0.75em;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+}
+
+.dateScope :global(.react-datepicker__header) {
+    background: #fff;
+    border-bottom: 1px solid rgba(12, 12, 12, 0.08);
+}
+
+.dateScope :global(.react-datepicker__day--selected),
+.dateScope :global(.react-datepicker__day--keyboard-selected) {
+    background: #b91616;
+    color: #fff;
+    border-radius: 50%;
+}
+
+.dateScope :global(.react-datepicker__day:hover) {
+    border-radius: 50%;
+    background: rgba(185, 22, 22, 0.12);
+}
+
+.dateScope :global(.react-datepicker__day--disabled) {
+    color: rgba(12, 12, 12, 0.25);
+}
+
+/* ---- Horários ---- */
+.slots {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+    gap: 0.6rem;
+}
+
+.slot {
+    padding: 0.65rem 0.5rem;
+    border: 1px solid rgba(12, 12, 12, 0.15);
+    border-radius: 0.5em;
+    background: #fff;
+    color: #0c0c0c;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: border-color 0.3s ease, color 0.3s ease, background 0.3s ease;
+}
+
+.slot:hover {
+    border-color: #b91616;
+    color: #b91616;
+}
+
+.slotActive,
+.slotActive:hover {
+    background: #b91616;
+    border-color: #b91616;
+    color: #fff;
+}
+
+/* ---- Avisos ---- */
+.notice {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.9rem 1rem;
+    margin-bottom: 0.75rem;
+    border-radius: 0.5em;
+    background: rgba(12, 12, 12, 0.04);
+    color: rgba(12, 12, 12, 0.65);
+    font-size: 0.9rem;
+}
+
+.notice svg {
+    flex-shrink: 0;
+}
+
+.noticeError {
+    background: rgba(185, 22, 22, 0.08);
+    color: #b91616;
+    border: 1px solid rgba(185, 22, 22, 0.25);
+}
+
+.loading {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 1rem;
+    color: rgba(12, 12, 12, 0.6);
+    font-size: 0.9rem;
+}
+
+.spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(12, 12, 12, 0.15);
+    border-top-color: #b91616;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ---- Botão de envio ---- */
+.submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.95rem 1.5rem;
+    border: 1px solid #0c0c0c;
+    border-radius: 100px;
+    background: #0c0c0c;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.3s ease, border-color 0.3s ease, gap 0.3s ease, opacity 0.3s ease;
+}
+
+.submit:not(:disabled):hover {
+    background: #b91616;
+    border-color: #b91616;
+    gap: 0.9rem;
+}
+
+.submit:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+/* ---- Mobile ---- */
+@media (max-width: 900px) {
+    .card {
+        grid-template-columns: 1fr;
+        max-width: 560px;
+    }
+
+    .brand {
+        display: none;
+    }
+
+    .formPanel {
+        padding: 2.5rem 1.5rem;
+    }
+}
