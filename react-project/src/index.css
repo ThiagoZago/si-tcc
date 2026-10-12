@@ -9,25 +9,36 @@
 
 :root {
   /* Cores de marca */
-  --color-black: #000;
+  --color-primary: #b91616;
+  --color-primary-dark: #8a1010;
+  --color-dark: #000;
   --color-dark-soft: #2c2c2c;
-  --color-red: #b91616;
-  --color-red-dark: #5f0b0b;
   --color-gray: #919496;
+  --color-light: #f0f0f0;
   --color-white: #fff;
 
   /* Cores de fundo (com transparência) */
   --color-red-bg: rgba(185, 22, 22, 0.9);
   --color-white-soft: rgba(255, 255, 255, 0.9);
+
+  --font-hero: clamp(2.2rem, 5vw, 4.5rem);
+  --font-title: clamp(1.5rem, 3vw, 2.2rem);
+  --font-body: 1.05rem;
+
+  --radius-lg: 2.5em;
+  --radius-md: 0.5em;
+
+  --transition-base: 0.4s ease;
 }
 
 
 
-html, body{
+html,
+body {
   overflow-x: hidden;
 }
 
-#home{
+#home {
   min-height: 100vh;
 }
 
@@ -44,6 +55,7 @@ body {
 code {
   font-family: Helvetica, Arial, sans-serif;
 }
+
 /*
 *
 *
@@ -61,29 +73,30 @@ code {
 /************** EDIÇÕES DA NAV BAR *************/
 /*=============================================*/
 
-nav.navbar-transparent{
+nav.navbar-transparent {
   padding: 15px 0;
   background: var(--color-black);
 }
 
-.navbar-light .navbar-nav .nav-link{
+.navbar-light .navbar-nav .nav-link {
   color: var(--color-white);
   font-weight: bold;
 }
 
-.navbar-light .navbar-nav .nav-link:hover{
+.navbar-light .navbar-nav .nav-link:hover {
   color: var(--color-red);
 }
 
-.navbar-light .navbar-toggler{
+.navbar-light .navbar-toggler {
   border-color: rgba(255, 255, 255, 0.5);
 }
 
-.divisor{
+.divisor {
   width: 1px;
   margin: 12px 15px;
   background: var(--color-red);
 }
+
 /*
 *
 *
@@ -100,25 +113,25 @@ nav.navbar-transparent{
 /************** EDIÇÕES DO FOOTER **************/
 /*=============================================*/
 
-footer{
+footer {
   background: var(--color-black);
   padding: 50px 0 20px 0;
   position: relative;
 }
 
-footer h4{
+footer h4 {
   color: var(--color-gray);
   font-size: 0.8em;
   text-transform: uppercase;
 }
 
-footer .navbar-nav a{
+footer .navbar-nav a {
   text-decoration: none;
   color: var(--color-white);
   font-size: 0.8em;
 }
 
-footer .navbar-nav a:hover{
+footer .navbar-nav a:hover {
   color: var(--color-red);
   font-size: 0.8em;
   text-decoration: none;
@@ -131,6 +144,7 @@ footer ul {
 footer ul li {
   float: right;
 }
+
 /*
 *
 *
@@ -151,7 +165,7 @@ footer ul li {
   background-color: var(--color-red-dark);
   text-decoration: underline;
   color: var(--color-white);
-  font-weight: 500; 
+  font-weight: 500;
 }
 
 
@@ -173,7 +187,7 @@ footer ul li {
   transition: background-color 0.4s, color 0.4s, text-decoration 0.4s;
 }
 
-#accordionExample .accordion-button.collapsed:hover{
+#accordionExample .accordion-button.collapsed:hover {
   background-color: var(--color-red-dark);
   color: var(--color-white);
   text-decoration: underline;
@@ -182,8 +196,10 @@ footer ul li {
 /* Remover o contorno azul quando o botão de toggle é clicado */
 #accordionExample .accordion-button:focus {
   outline: none;
-  box-shadow: none; /* Também remove qualquer sombra de foco, como o contorno azul */
+  box-shadow: none;
+  /* Também remove qualquer sombra de foco, como o contorno azul */
 }
+
 /*
 *
 *
