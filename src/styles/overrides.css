@@ -1,0 +1,144 @@
+.booking-inline-summary {
+  display: none;
+}
+@media (max-width: 800px) {
+  .booking-inline-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 16px;
+    margin-bottom: 24px;
+    border-radius: 7px;
+    background: var(--cream);
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .booking-inline-summary strong {
+    color: var(--ink);
+    font-size: 13px;
+  }
+}
+.sidebar nav a,
+.sidebar-bottom > a {
+  font-size: 12px;
+}
+.workspace-switch strong,
+.sidebar-user strong {
+  font-size: 12px;
+}
+.workspace-switch small,
+.sidebar-user small {
+  font-size: 10px;
+}
+.dashboard-title p {
+  font-size: 12px;
+}
+.metric-card > div > span:first-child {
+  font-size: 11px;
+}
+.metric-card > small {
+  font-size: 10px;
+}
+.panel-heading p {
+  font-size: 11px;
+}
+.popular-list strong,
+.table-person strong {
+  font-size: 12px;
+}
+.popular-list small,
+.table-person small,
+.cell-small {
+  font-size: 10px;
+}
+.popular-list > div > span:last-child,
+.status-badge {
+  font-size: 10px;
+}
+table,
+.cell-text,
+.time-label {
+  font-size: 12px;
+}
+th,
+.table-context > span,
+.small-link,
+.chart-column > small {
+  font-size: 10px;
+}
+.dashboard-header .breadcrumb,
+.header-date {
+  font-size: 11px;
+}
+.chart-axis {
+  font-size: 9px;
+}
+.chart-total > span {
+  font-size: 10px;
+}
+.service-card > p,
+.professional-card > p,
+.service-card-actions > button:first-child {
+  font-size: 12px;
+}
+.service-card-professionals > small,
+.professional-card-services {
+  font-size: 11px;
+}
+.professional-role,
+.service-card-value > span,
+.table-filters > select,
+.action-select {
+  font-size: 11px;
+}
+.form-stack label,
+.checkbox-label,
+.settings-form label {
+  font-size: 12px;
+}
+.booking-panel > p,
+.service-option div > span:not(.option-radio) {
+  font-size: 12px;
+}
+.booking-progress li > small,
+.booking-summary li > span,
+.summary-safe {
+  font-size: 11px;
+}
+.booking-summary li strong,
+.summary-business strong {
+  font-size: 13px;
+}
+.booking-summary .summary-business small,
+.summary-payment {
+  font-size: 11px;
+}
+.booking-summary .summary-total > span {
+  font-size: 12px;
+}
+.booking-section .notice,
+.dashboard-main .notice {
+  font-size: 12px;
+}
+@media (max-width: 600px) {
+  .metric-card > div > span:first-child {
+    font-size: 10px;
+  }
+  .metric-card > small {
+    font-size: 9px;
+  }
+  .panel-heading p,
+  .chart-total > span {
+    font-size: 10px;
+  }
+  .report-chart .chart-column > small {
+    font-size: 7px;
+  }
+  .booking-progress li > small {
+    font-size: 9px;
+  }
+  .chart-axis {
+    width: 48px;
+    font-size: 8px;
+  }
+}

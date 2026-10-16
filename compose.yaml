@@ -1,0 +1,14 @@
+services:
+  barbapp:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      APP_URL: ${APP_URL:-http://localhost:3000}
+      ENABLE_DEMO: "false"
+      DATABASE_PATH: /app/data/barbapp.sqlite
+    volumes:
+      - barbapp-data:/app/data
+    restart: unless-stopped
+volumes:
+  barbapp-data:
